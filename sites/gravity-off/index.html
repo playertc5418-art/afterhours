@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e6e3db"><meta name="description" content="GRAVITY OFF — 抓住，甩开，重新开始。">
+<title>GRAVITY OFF</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2328282a'/%3E%3Cpath d='M18 17h28v9H27v12h10v-5h9v14H18z' fill='%23f0efe9'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<h1 class="sr-only">GRAVITY OFF — 可互动的三维文字</h1>
+<header>
+<a class="wordmark" href="./" aria-label="Gravity Off 首页" title="复原"><span>g.</span></a>
+<div class="top-actions">
+<button id="sound" class="icon-button audio-button" aria-label="关闭声音" aria-pressed="true" title="声音 · 首次操作时播放"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/><path class="sound-slash" d="m16 9 5 6m0-6-5 6"/></svg><span id="sound-label">声音开</span></button>
+<button id="more" class="icon-button settings-button" aria-label="更多控制" aria-expanded="false" aria-controls="controls" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg><span>设置</span></button>
+</div></header>
+<main id="stage" tabindex="0" aria-label="拖动字母、松手甩开的三维物理场景">
+<div id="canvas-host"></div><div id="cursor" aria-hidden="true"><span>拖动</span></div>
+<div id="loading" role="status"><i></i><span>正在装配</span></div>
+<div id="fallback" hidden><strong>暂时无法显示三维场景</strong><p>请开启浏览器硬件加速后重试。</p><button id="retry">重新加载</button></div>
+</main>
+<section id="gravity-control" class="gravity-control" aria-label="重力控制">
+<span class="gravity-title">重力</span>
+<div class="segmented" role="group" aria-label="重力方向">
+<button data-gravity="zero" aria-label="零重力" aria-pressed="true" title="失重 · ↑ / G" disabled><span class="gravity-symbol">0 g</span><span>失重</span></button>
+<button data-gravity="left" aria-label="重力向左" aria-pressed="false" title="向左 · ←" disabled><span class="gravity-symbol">←</span><span>向左</span></button>
+<button data-gravity="down" aria-label="重力向下" aria-pressed="false" title="向下 · ↓" disabled><span class="gravity-symbol">↓</span><span>向下</span></button>
+<button data-gravity="right" aria-label="重力向右" aria-pressed="false" title="向右 · →" disabled><span class="gravity-symbol">→</span><span>向右</span></button>
+</div></section>
+<div class="dock" aria-label="主要操作">
+<button id="release" disabled><span id="release-label">释放</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg><i id="rebuild-progress"></i></button>
+<button id="rebuild" class="icon-button reset" aria-label="重新组装" title="复原 · R" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 .6 6M4 4v6h6"/></svg></button>
+<button id="pause" class="pause-control" aria-label="暂停模拟" aria-pressed="false" title="暂停 · P" disabled><svg id="pause-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.5v11m7-11v11"/></svg><span id="pause-label">暂停</span></button>
+</div>
+<aside id="controls" hidden aria-label="更多控制面板">
+<div class="control-heading"><span>设置</span><button id="close-controls" class="icon-button" aria-label="关闭控制面板">×</button></div>
+<div class="panel-tools"><button id="pulse" disabled>冲击 <span>空格</span></button><button id="about">玩法 <span>?</span></button></div>
+<label class="volume-control" for="volume">音量<input id="volume" type="range" min="0" max="100" value="65" aria-label="音量"></label>
+</aside>
+<div id="notice" role="status" aria-live="polite"></div>
+<div id="live-state" class="sr-only" role="status" aria-live="polite"></div>
+<dialog id="help-dialog"><button id="close-help" class="icon-button" aria-label="关闭玩法说明">×</button><h2>抓住。甩开。<br>重新开始。</h2><dl><div><dt>拖动字母</dt><dd>松手保留惯性，偏心抓取会产生旋转。</dd></div><div><dt>释放 / 空格</dt><dd>向外冲击。双击场景可指定冲击位置。</dd></div><div><dt>复原 / R</dt><dd>所有字母重新归位。</dd></div><div><dt>重力与暂停</dt><dd>底部切换重力、暂停；方向键、P 和 G 也可操作。</dd></div></dl><button id="help-start">开始玩 ↗</button></dialog>
+<script type="module" src="./app.js"></script>
+</body></html>

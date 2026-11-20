@@ -1,0 +1,27 @@
+Shop welcome: いらっしゃいませ。
+Synthesized with Open JTalk using HTS Voice "Mei", released by the MMDAgent Project Team.
+Voice model copyright (c) 2009–2013 Nagoya Institute of Technology, Department of Computer Science.
+Voice model license: Creative Commons Attribution 3.0 https://creativecommons.org/licenses/by/3.0/
+Project: https://mmdagent.sourceforge.io/
+The generated utterance was adjusted in pitch and speed during synthesis and encoded for local playback.
+
+spring-train-horn.mp3
+"Gingasen-whistle.ogg" by Cassiopeia sweet, Hokkaido Chihokukogen Railway CR70 whistle recorded on 30 August 1994.
+Source: https://commons.wikimedia.org/wiki/File:Gingasen-whistle.ogg
+License for the source and this edited recording: CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0/
+Changes: mono conversion, filtering, pitch-preserving extension of the sustained middle, crossfades and tail fade, gain adjustment, MP3 encoding.
+
+summer-herring-gull.mp3
+"XC707075 - European Herring Gull - Larus argentatus.mp3" by Sonothèque ADVL, flight calls recorded on 5 August 2021.
+Source: https://commons.wikimedia.org/wiki/File:XC707075_-_European_Herring_Gull_-_Larus_argentatus.mp3
+License: CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/
+Changes: excerpt from 5.42 to 8.72 seconds, mono conversion, filtering, gain and edge fades, MP3 encoding.
+
+valley-water.ogg — Flowing-water-100019 by Fg2, public domain.
+https://commons.wikimedia.org/wiki/File:Flowing-water-100019.ogg
+
+leaf-water-contact.wav
+Water drops dripping by ZooFari, CC BY-SA 3.0.
+https://commons.wikimedia.org/wiki/File:Water_drops_dripping.ogg
+https://creativecommons.org/licenses/by-sa/3.0/
+Changes: isolated 0.22-second transient near 1.93 seconds; mono conversion, filtering, fades, peak normalization. This adapted recording remains CC BY-SA 3.0.

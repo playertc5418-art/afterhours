@@ -1,0 +1,32 @@
+{
+  "title": "Meanwhile",
+  "artist": "Scott Buckley",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "authorPage": "https://www.scottbuckley.com.au/library/meanwhile/",
+  "authorUsage": "https://www.scottbuckley.com.au/library/using-this-music/",
+  "recordingSource": "https://music.163.com/#/song?id=2679356830",
+  "publicAudioEntry": "https://music.163.com/song/media/outer/url?id=2679356830.mp3",
+  "acquired": "2026-10-30",
+  "durationSeconds": 325.877551,
+  "bitRate": 128021,
+  "bytes": 5214920,
+  "sha256": "11a9a6c28976c32d153401a22c3619b25fc42f531064754c76d9e06a8dde6b35",
+  "identityChecks": {
+    "publicDirectoryTitle": "Meanwhile",
+    "publicDirectoryArtists": [
+      "Scott Buckley"
+    ],
+    "publicDirectoryDurationMs": 325877,
+    "completeFileDecoded": true
+  },
+  "edit": {
+    "trimStartSeconds": 2.2,
+    "deliveredDurationSeconds": 323.58932,
+    "deliveredBytes": 5179393,
+    "deliveredSha256": "0eb006fc30d69b1f2544902e272b1b65a7aafa7d7d968e83519b16f06419d5ba",
+    "method": "ffmpeg -ss 2.2 -i source.mp3 -c copy (frame-aligned, no re-encode)"
+  },
+  "changes": "The delivered file trims the near-silent head (requested 2.20 s; 2.288 s effective after MP3 frame alignment) and is otherwise untouched. The source download above remains the complete 325.877551 s file. The local player applies volume, fades, pause/resume and looping. Not byte-identical to the unavailable author-hosted master.",
+  "attribution": "'Meanwhile' by Scott Buckley — released under CC BY 4.0. www.scottbuckley.com.au"
+}

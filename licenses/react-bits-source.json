@@ -1,0 +1,69 @@
+{
+  "repository": "https://github.com/DavidHDev/react-bits",
+  "commit": "e12c22192ac7b4b452c5e2feb9b586d74765d696",
+  "originalFile": "src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx",
+  "jsxBlob": "2eded7d445b324706ff984adff701c4856cdf416",
+  "cssBlob": "ad5ac01b91a8420ff02f6583516f571543ffb8c3",
+  "licenseBlob": "4069ce9d0ef1a712c93d6ce48ade5d5667e0f5ee",
+  "modifications": [
+    "onReady callback after first rendered frame",
+    "pixelRatio cap (1.5)",
+    "forceContextLoss on cleanup",
+    "onBoostUpdate includes boost, pace, fov, motion time, curve time and stretch telemetry",
+    "configurable boost response, release and trail stretch",
+    "BEND shader reads independent uCurveTime; motion remains on uTime",
+    "handoffRef aligns curvature, steering and FOV and eases travel pace during arrival",
+    "dust stretch capped at 1.35 to contain peripheral streak length",
+    "roadAlignmentRef straightens road/camera over route progress without altering boost pace",
+    "curveTimeRef drives the original gentle curve through a route-controlled left/right half-cycle",
+    "fitCurveToViewport scales curvature with camera aspect on narrow screens",
+    "tapBoostDuration and boostPulseRef preserve brief input across render frames",
+    "actual speed drives both shader motion and journey; no automatic ending boost",
+    "pausedRef freezes simulation and inputs without destroying the WebGL context",
+    "native visibility listener resets frame timestamp on background resume",
+    "paletteMixRef interpolates existing tail color uniforms over route progress 0.72..1",
+    "optional linear boostRampDuration; current opening rises from 1x to 4x in 1.5s, retaining original release damping"
+  ],
+  "preset": {
+    "curve": "gentle",
+    "tailColors": [
+      "#324127",
+      "#607942",
+      "#8aa65b"
+    ],
+    "headColors": [
+      "#ecebdc",
+      "#d8dcc7",
+      "#c7cead"
+    ],
+    "poleColors": [
+      "#ecebdc"
+    ],
+    "roadWidth": 9,
+    "density": 30,
+    "poles": 32,
+    "curvature": 1,
+    "speed": 0.62,
+    "boost": 4,
+    "boostResponse": 0.14,
+    "boostRelease": 0.48,
+    "boostStretch": 1.25,
+    "trailLength": 0.85,
+    "fov": 80,
+    "boostFov": 94,
+    "background": "transparent over the existing dark root",
+    "fitCurveToViewport": true,
+    "tapBoostDuration": 0.35,
+    "arrivalTailColors": [
+      "#527437",
+      "#9bc758",
+      "#c5f467"
+    ],
+    "roadColor": "#080a08",
+    "lineColor": "#272c22",
+    "boostRampDuration": 1.5
+  },
+  "routeCurveTime": "PI * (1.5 + smoothstep(progress / 0.6)); alignment over progress 0.42..0.6",
+  "status": "V21: actual-speed energy fill, bounded jets, immediate release, no cooldown",
+  "pointerFeedback": "DOM/SVG energy ring follows actual speed while held; 200ms release; at most twelve rays, eight on mobile; a separate full-charge burst and shockwave; no cooldown or extra WebGL context"
+}

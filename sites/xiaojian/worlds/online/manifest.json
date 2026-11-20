@@ -1,0 +1,78 @@
+{
+  "base": "worlds/online/",
+  "environments": [
+    {
+      "id": "rain-128",
+      "url": "environments/rain-128-72f28b84d9303c3d.bin",
+      "width": 384,
+      "height": 512,
+      "source": "worlds/environments/rain-128.json",
+      "jsonBytes": 350736,
+      "base64Bytes": 350540,
+      "packedBytes": 262904,
+      "packedSha256": "72f28b84d9303c3dfb42c73d9d2923da0b44f68fb7bcaed53d10adc0518d137c",
+      "decodedSha256": "0c19bb00be292380e9bd0aacae570bfe673395edac1ef4468372057be762bac9",
+      "format": "RGBA16F"
+    },
+    {
+      "id": "rain-256",
+      "url": "environments/rain-256-9aec153646046563.bin",
+      "width": 768,
+      "height": 1024,
+      "source": "worlds/environments/rain-256.json",
+      "jsonBytes": 1191677,
+      "base64Bytes": 1191480,
+      "packedBytes": 893610,
+      "packedSha256": "9aec1536460465630d4a5599873934ea7a8de852cd2a8ee290d098c477441f8c",
+      "decodedSha256": "453529699cbc0e8eb97f5165652c21e23a6d17b82c21f34d6dfdbc9d2699457b",
+      "format": "RGBA16F"
+    }
+  ],
+  "files": [
+    {
+      "path": "modules/spring-56C2SS3Q.js",
+      "bytes": 35101,
+      "sha256": "fc5fee1500ca0b416006cfcbd1f2d715fab0ea243e1ee9ce340b846d7f19576f"
+    },
+    {
+      "path": "modules/summer-ABWAPBSC.js",
+      "bytes": 41105,
+      "sha256": "4e6453ad485e944cf33dea227771733d7c8ba2756e507e50565fada7498f9a5e"
+    },
+    {
+      "path": "modules/rain-ZIKNFE65.js",
+      "bytes": 92449,
+      "sha256": "d70a3399acd6c5ff9cc5cc9246ed7045f08b833f822db6819ea46dffc594bc0b"
+    },
+    {
+      "path": "modules/winter-M7EISLMO.js",
+      "bytes": 37417,
+      "sha256": "c4f420c9acda4a88848ff1672bc1e32bf901e6e5d0d30525b9074b5f981d1b48"
+    },
+    {
+      "path": "modules/shared-FK2TOBSH.js",
+      "bytes": 734373,
+      "sha256": "df4548c72d42842121d4383876cf3add13dba79d42c39bec67f2d471b87a32d5"
+    },
+    {
+      "path": "spring.html",
+      "bytes": 2337,
+      "sha256": "77fdacf7c6820a95ab5f7960fbe5e7f35c345ddafb9eb003fb52d3b8389f8318"
+    },
+    {
+      "path": "summer.html",
+      "bytes": 2189,
+      "sha256": "c761ce84b5b937444ed04b75cd3af7ba0d84b60df3cb266c72015bd0d8b3dd11"
+    },
+    {
+      "path": "rain.html",
+      "bytes": 2179,
+      "sha256": "63a7621301a489c386f1cef4b44f5415c13707d637b589c868606a8e85d9f9b3"
+    },
+    {
+      "path": "winter.html",
+      "bytes": 2189,
+      "sha256": "91a158a6f424a8a1b50b161ac48656499cf8c68e7133810402a0b618e488c433"
+    }
+  ]
+}
