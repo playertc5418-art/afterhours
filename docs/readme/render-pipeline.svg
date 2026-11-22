@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">FORM / FIELD — preparation and renderer handoff</title>
+  <desc id="desc">Worker asset preparation, incremental shader compilation, small framebuffer draw batches, then a readiness-gated reveal. The opening and architecture share one WebGLRenderer. Independent experiences run in their own pages. Moving dots illustrate architecture, not measured timings.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#1b241e" stroke-width=".5"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="m2 1 6 4-6 4" fill="none" stroke="#8c9a8c" stroke-width="1.5"/></marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#f1f2e9}.mono{font-family:Consolas,'Liberation Mono',monospace;letter-spacing:1.5px}.muted{fill:#a1aaa1}.lime{fill:#c6f66a}.small{font-size:14px}.label{font-size:12px;letter-spacing:2px}.heading{font-size:18.5px;font-weight:700}.wire{fill:none;stroke:#71806f;stroke-width:1.4;marker-end:url(#arrow)}
+      @media(prefers-reduced-motion:reduce){.signal{display:none}}
+    </style>
+  </defs>
+  <rect width="1200" height="650" fill="#0b100d" rx="10"/>
+  <rect width="1200" height="650" fill="url(#grid)" rx="10"/>
+  <path d="M40 104H1160" stroke="#34412f"/>
+  <rect x="40" y="34" width="9" height="9" fill="#c6f66a"/>
+  <text x="64" y="43" class="mono label muted">FORM / FIELD · ENGINEERING NOTES</text>
+  <text x="40" y="82" font-size="30" font-weight="700">PREPARE FIRST. REVEAL WHEN READY.</text>
+  <text x="40" y="140" class="mono label lime">01 / PREPARATION</text>
+  <g transform="translate(40 165)">
+    <rect width="250" height="145" rx="4" fill="#111a13" stroke="#435538"/>
+    <text x="18" y="28" class="mono label lime">ASSETS</text>
+    <text x="18" y="65" class="heading">Worker environment I/O</text>
+    <text x="18" y="94" class="small muted">Fetch + gzip decompression</text>
+    <text x="18" y="119" class="mono small muted">Transferable → DataTexture</text>
+  </g>
+  <g transform="translate(330 165)">
+    <rect width="250" height="145" rx="4" fill="#111a13" stroke="#435538"/>
+    <text x="18" y="28" class="mono label lime">PROGRAMS</text>
+    <text x="18" y="65" class="heading">Incremental compilation</text>
+    <text x="18" y="94" class="small muted">Representative shader variants</text>
+    <text x="18" y="119" class="mono small muted">compileAsync · batches of 8</text>
+  </g>
+  <g transform="translate(620 165)">
+    <rect width="250" height="145" rx="4" fill="#111a13" stroke="#435538"/>
+    <text x="18" y="28" class="mono label lime">FIRST DRAW</text>
+    <text x="18" y="65" class="heading">Small-area draw priming</text>
+    <text x="18" y="94" class="small muted">Exercise real framebuffer draws</text>
+    <text x="18" y="119" class="mono small muted">4 objects · 32 × 32 viewport</text>
+  </g>
+  <g transform="translate(910 165)">
+    <rect width="250" height="145" rx="4" fill="#1c2816" stroke="#c6f66a"/>
+    <text x="18" y="28" class="mono label lime">READINESS</text>
+    <text x="18" y="65" class="heading">Gate the reveal</text>
+    <text x="18" y="94" class="small muted">Fonts, scene, resources, GPU prep</text>
+    <text x="18" y="119" class="mono small muted">ready → present → enter</text>
+  </g>
+  <path d="M292 237H325M582 237H615M872 237H905" class="wire"/>
+  <g class="signal" fill="#c6f66a">
+    <circle r="3"><animateMotion dur="2s" repeatCount="indefinite" path="M292 237H325"/></circle>
+    <circle r="3"><animateMotion dur="2s" begin=".45s" repeatCount="indefinite" path="M582 237H615"/></circle>
+    <circle r="3"><animateMotion dur="2s" begin=".9s" repeatCount="indefinite" path="M872 237H905"/></circle>
+  </g>
+  <text x="40" y="359" class="mono label lime">02 / A SHARED RENDERER, A CONTINUOUS HANDOFF</text>
+  <rect x="40" y="384" width="680" height="163" rx="4" fill="#0f1611" stroke="#34412f"/>
+  <text x="60" y="416" class="small muted">The opening keeps the screen while the home scene prepares.</text>
+  <rect x="62" y="446" width="155" height="58" rx="3" fill="#172017" stroke="#4b5a43"/>
+  <text x="139" y="480" text-anchor="middle" class="mono small">OPENING ROAD</text>
+  <rect x="273" y="440" width="213" height="70" rx="3" fill="#233219" stroke="#c6f66a"/>
+  <text x="379" y="469" text-anchor="middle" class="mono small lime">ONE CANVAS</text>
+  <text x="379" y="492" text-anchor="middle" font-size="13" class="muted">Shared WebGLRenderer</text>
+  <rect x="542" y="446" width="155" height="58" rx="3" fill="#172017" stroke="#4b5a43"/>
+  <text x="619" y="480" text-anchor="middle" class="mono small">HOME / ROOMS</text>
+  <path d="M221 475H266M490 475H535" class="wire"/>
+  <g class="signal" fill="#c6f66a"><circle r="3"><animateMotion dur="3s" repeatCount="indefinite" path="M221 475H266"/></circle><circle r="3"><animateMotion dur="3s" begin="1s" repeatCount="indefinite" path="M490 475H535"/></circle></g>
+  <rect x="746" y="384" width="414" height="163" rx="4" fill="#141712" stroke="#454837"/>
+  <text x="766" y="416" class="mono label" fill="#e5ba79">INDEPENDENT EXPERIENCES</text>
+  <text x="766" y="451" class="heading">Singularity / Gravity Off / 小间</text>
+  <text x="766" y="481" class="small muted">Open as separate pages with their own runtime.</text>
+  <text x="766" y="508" class="small muted">Host-site miniatures do not run all three apps.</text>
+  <path d="M40 585H1160" stroke="#34412f"/>
+  <text x="40" y="615" class="mono label muted">SIMPLIFIED ARCHITECTURE · ANIMATION IS NOT LIVE TELEMETRY</text>
+  <text x="1160" y="615" text-anchor="end" class="mono label lime">FORM / FIELD</text>
+</svg>
