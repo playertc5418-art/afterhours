@@ -4,7 +4,7 @@
 
 **用代码，构筑可感知的空间。**
 
-实时三维场景 · 空间交互 · 渲染调度 · 声音叙事
+实时三维 · 空间交互 · 渲染调度
 
 [进入网站 ↗](https://playertc5418-art.github.io/form-field/) · [技术拆解](docs/ENGINEERING.md) · [探索三个作品](#三个独立作品)
 
@@ -45,47 +45,21 @@ FORM / FIELD 是我的个人数字作品集。我把导航放进一座可以探�
 
 <table>
 <tr>
-<td width="33%" valign="top">
-
-<a href="https://playertc5418-art.github.io/form-field/sites/blackhole/"><img src="docs/readme/singularity.webp" alt="奇点：黑洞与吸积盘的实时画面" width="100%" /></a>
-
-**奇点 · SINGULARITY**
-
-黑洞视觉与距离联动声景。镜头靠近时，声音的强度与音色一起变化，让距离也能被听见。
-
-`Three.js` · `Web Audio`
-
-[进入奇点 ↗](https://playertc5418-art.github.io/form-field/sites/blackhole/)
-
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/form-field/sites/blackhole/"><img src="docs/readme/singularity.webp" alt="奇点：黑洞与吸积盘的实时画面" width="100%" /><br />奇点 ↗</a>
 </td>
-<td width="33%" valign="top">
-
-<a href="https://playertc5418-art.github.io/form-field/sites/gravity-off/"><img src="docs/readme/gravity-off.gif" alt="GRAVITY OFF：真实页面释放字形后的物理运动" width="100%" /></a>
-
-**GRAVITY OFF**
-
-把文字变成可操作的三维物体。释放、拖动、改变重力与重新组装，探索字形和物理之间的关系。
-
-`Three.js` · `Rapier`
-
-[进入失重 ↗](https://playertc5418-art.github.io/form-field/sites/gravity-off/)
-
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/form-field/sites/gravity-off/"><img src="docs/readme/gravity-off.gif" alt="GRAVITY OFF：真实页面释放字形后的物理运动" width="100%" /><br />失重 ↗</a>
 </td>
-<td width="33%" valign="top">
-
-<a href="https://playertc5418-art.github.io/form-field/sites/xiaojian/"><img src="docs/readme/xiaojian.webp" alt="小间：微缩世界收藏室的真实页面" width="100%" /></a>
-
-**小间 · 微缩世界收藏室**
-
-把铁路、海边、雨夜、神社与圣诞小屋收藏进浏览器，让光线、天气和声音参与空间叙事。
-
-`WebGL` · `Scene Design`
-
-[进入小间 ↗](https://playertc5418-art.github.io/form-field/sites/xiaojian/)
-
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/form-field/sites/xiaojian/"><img src="docs/readme/xiaojian.webp" alt="小间：微缩世界收藏室的真实页面" width="100%" /><br />小间 ↗</a>
 </td>
 </tr>
 </table>
+
+- **奇点 · SINGULARITY** — `Three.js` · `Web Audio`。黑洞视觉与距离联动声景；镜头靠近时，声音的强度与音色一起变化，让距离也能被听见。
+- **GRAVITY OFF** — `Three.js` · `Rapier`。把文字变成可操作的三维物体，通过释放、拖动、改变重力与重新组装，探索字形和物理之间的关系。
+- **小间 · 微缩世界收藏室** — `WebGL` · `Scene Design`。把铁路、海边、雨夜、神社与圣诞小屋收藏进浏览器，让光线、天气和声音参与空间叙事。
 
 <details>
 <summary><strong>适配、验证与项目说明</strong></summary>
