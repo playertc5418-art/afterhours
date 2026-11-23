@@ -48,7 +48,7 @@ The handoff restores render target, viewport, scissor, clearing behavior, output
 
 ### Worker-side environment data
 
-A Worker fetches baked environment data, checks headers, dimensions, and byte lengths, and decompresses gzip when required. Transferable buffers return to the main thread, which constructs half-float textures. The Worker does not create a WebGL context or perform GPU uploads. Failures settle resources through the fallback path.
+A Worker fetches baked environment data, checks headers, dimensions, and byte lengths, and decompresses gzip when required. Transferable buffers return to the main thread, which constructs half-float textures. The Worker does not create a WebGL context or perform GPU uploads. Failures settle resources through the fallback path. A download that remains pending for 15 seconds is terminated, allowing the existing procedural environments to prepare the scene. The outer preparation deadline allows 90 seconds.
 
 ### Incremental compilation and draw priming
 

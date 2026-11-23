@@ -1,4 +1,4 @@
-import { s as startup, g as getRenderHost, r as runtime, a as reactExports, p as projects, j as jsxRuntimeExports, l as lockRoomScroll, b as roomJourneyState, e as exitRoom, f as finishRoomTransition } from './index-CdkFugS_.js';
+import { s as startup, g as getRenderHost, r as runtime, a as reactExports, p as projects, j as jsxRuntimeExports, l as lockRoomScroll, b as roomJourneyState, e as exitRoom, f as finishRoomTransition } from './index-Cnjb831L.js';
 import { D as DataTexture, R as RGBAFormat, H as HalfFloatType, s as CubeUVReflectionMapping, L as LinearSRGBColorSpace, t as LinearFilter, G as Group, u as Texture, a as Scene, v as MeshDepthMaterial, w as DoubleSide, x as BackSide, F as FrontSide, y as RGBADepthPacking, z as InstancedMesh, M as Mesh, h as WebGLRenderTarget, d as Vector3, B as BufferGeometry, E as Float32BufferAttribute, j as ShaderMaterial, n as AdditiveBlending, J as Points, g as LineSegments, k as Vector2, K as MathUtils, b as PerspectiveCamera, O as OrthographicCamera, c as PlaneGeometry, Q as Matrix4, X as Quaternion, Y as UniformsUtils, _ as Euler, $ as Box3, V as Vector4, a0 as HemisphereLight, a1 as DirectionalLight, a2 as Material, a3 as MeshStandardMaterial, a4 as MeshBasicMaterial, a5 as MeshPhysicalMaterial, a6 as PMREMGenerator, i as Color, a7 as BoxGeometry, a8 as CanvasTexture, S as SRGBColorSpace, a9 as RepeatWrapping, f as BufferAttribute, C as CylinderGeometry, aa as Plane, ab as OctahedronGeometry, ac as CircleGeometry, ad as DodecahedronGeometry, ae as CatmullRomCurve3, T as TubeGeometry, af as Shape, ag as ShapeGeometry, ah as ExtrudeGeometry, ai as PointLight, aj as NoColorSpace, ak as TextureLoader, al as Path, am as TorusGeometry, an as SphereGeometry, ao as RingGeometry, ap as Object3D, aq as IcosahedronGeometry, ar as ConeGeometry, as as EdgesGeometry, at as LineBasicMaterial, au as Fog, av as Raycaster, aw as MeshLambertMaterial, A as ACESFilmicToneMapping, P as PCFSoftShadowMap } from './three-C7fIRf5V.js';
 import './motion-DpMaEHIX.js';
 
@@ -19,8 +19,12 @@ function loadBakedEnvironments() {
   return loading ??= new Promise((resolve) => {
     const base = "./opening/environments/";
     for (const name of ["atelier", "gallery"]) startup.resource(base + name + ".bin.gz");
-    let worker;
+    let worker, timeout, settled = false;
     const finish = (fallback) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      worker?.terminate();
       for (const name of ["atelier", "gallery"]) startup.settleResource(base + name + ".bin.gz", fallback);
       resolve();
     };
@@ -30,10 +34,14 @@ function loadBakedEnvironments() {
       finish(true);
       return;
     }
+    timeout = window.setTimeout(() => {
+      console.warn("Baked environment download timed out; using runtime environments.");
+      finish(true);
+    }, 15e3);
     worker.onmessage = (event) => {
+      if (settled) return;
       if (event.data.error) {
         console.warn("Baked environment fallback:", event.data.error);
-        worker.terminate();
         finish(true);
         return;
       }
@@ -47,12 +55,10 @@ function loadBakedEnvironments() {
         texture.name = "BakedEnvironment." + map.name;
         maps.set(map.name, texture);
       }
-      worker.terminate();
       finish(false);
     };
     worker.onerror = (event) => {
       console.warn("Environment worker failed:", event.message);
-      worker.terminate();
       finish(true);
     };
     worker.postMessage({ base: new URL(base, location.href).href });
