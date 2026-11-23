@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
-  <title id="title">FORM / FIELD — preparation and renderer handoff</title>
+  <title id="title">AFTERHOURS — preparation and renderer handoff</title>
   <desc id="desc">Worker asset preparation, incremental shader compilation, small framebuffer draw batches, then a readiness-gated reveal. The opening and architecture share one WebGLRenderer. Independent experiences run in their own pages. Moving dots illustrate architecture, not measured timings.</desc>
   <defs>
     <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#1b241e" stroke-width=".5"/></pattern>
@@ -13,7 +13,7 @@
   <rect width="1200" height="650" fill="url(#grid)" rx="10"/>
   <path d="M40 104H1160" stroke="#34412f"/>
   <rect x="40" y="34" width="9" height="9" fill="#c6f66a"/>
-  <text x="64" y="43" class="mono label muted">FORM / FIELD · ENGINEERING NOTES</text>
+  <text x="64" y="43" class="mono label muted">AFTERHOURS · ENGINEERING NOTES</text>
   <text x="40" y="82" font-size="30" font-weight="700">PREPARE FIRST. REVEAL WHEN READY.</text>
   <text x="40" y="140" class="mono label lime">01 / PREPARATION</text>
   <g transform="translate(40 165)">
@@ -69,5 +69,5 @@
   <text x="766" y="508" class="small muted">Host-site miniatures do not run all three apps.</text>
   <path d="M40 585H1160" stroke="#34412f"/>
   <text x="40" y="615" class="mono label muted">SIMPLIFIED ARCHITECTURE · ANIMATION IS NOT LIVE TELEMETRY</text>
-  <text x="1160" y="615" text-anchor="end" class="mono label lime">FORM / FIELD</text>
+  <text x="1160" y="615" text-anchor="end" class="mono label lime">AFTERHOURS</text>
 </svg>

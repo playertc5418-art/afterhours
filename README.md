@@ -1,86 +1,96 @@
-<div align="center">
+<p align="center">
+<a href="README.md"><img src="docs/readme/language-en-active.svg" alt="English — current language" height="28" /></a>
+<a href="README.zh-CN.md"><img src="docs/readme/language-zh.svg" alt="Read in Simplified Chinese" height="28" /></a>
+</p>
 
-# FORM / FIELD
+<h1 align="center">AFTERHOURS</h1>
 
-**用代码，构筑可感知的空间。**
+<p align="center"><strong>Ideas take shape after dark.</strong><br />A nighttime workshop for spatial interfaces and real-time graphics.</p>
 
-实时三维 · 空间交互 · 渲染调度
+<p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a></p>
 
-[进入网站 ↗](https://playertc5418-art.github.io/form-field/) · [技术拆解](docs/ENGINEERING.md) · [探索三个作品](#三个独立作品)
+[![Explore the architecture, enter a room, and return to the overview](docs/readme/spatial-interaction.gif)](https://playertc5418-art.github.io/afterhours/)
 
-`React 19`　`TypeScript`　`Three.js`　`GSAP`　`Lenis`
+## An interface built as a place
 
-</div>
+Rooms are navigation. Objects lead into chapters. A nighttime building connects project stories, graphics experiments, and miniature worlds through camera movement and scene-to-DOM transitions.
 
-[![FORM / FIELD：建筑总览、房间聚焦与返回的真实交互录屏](docs/readme/spatial-interaction.gif)](https://playertc5418-art.github.io/form-field/)
+Raycast proxies follow the scene's perspective. Room inspection and object activation use distinct states, coordinating camera, scroll, and focus before handing control to the page.
 
-<p align="center"><sub>实际页面录屏：建筑总览 → 进入房间 → 返回。GIF 为取样预览，完整交互请进入网站。</sub></p>
-
-FORM / FIELD 是我的个人数字作品集。我把导航放进一座可以探索的夜间建筑，让房间、物件与页面内容相互接力：从空间里发现作品，再进入案例、视觉实验和微缩世界。
-
-## 空间如何成为界面
-
-- **建筑里的导航**：用 Raycaster 命中空间代理，聚焦对应房间；点击内部物件后，继续进入项目、实验或个人空间。支持拖拽环视、返回和键盘操作。
-- **三维与页面接力**：相机、物件姿态和 DOM 内容围绕同一段旅程编排，让房间中的展示屏、实验装置与后续章节产生连续关系。
-- **可以亲手操作的实验**：流体文字、粒子、媒体揭示与材质研究，把视觉效果和原理说明放在一起。
-- **具体的项目实践**：智盾 SOC、HEMW、CodeEdu–Trace 的案例包含实现思路、技术取舍与验证范围。
-
-## 画面背后的工程
-
-![资源准备、分帧编译、真实绘制预热和共享渲染器接力示意](docs/readme/render-pipeline.svg)
-
-<p align="center"><sub>架构示意；移动节点用于说明流程，不代表实时性能或实际耗时。</sub></p>
-
-| 技术点 | 具体实现 |
-| :--- | :--- |
-| **开场与主站共享 renderer** | 使用一个 `WebGLRenderer`，在开场和建筑首页之间切换渲染配置、交接同一块 canvas；开场仍在屏幕上时，主站已开始准备。 |
-| **Worker 环境数据准备** | 在 Worker 中读取、解压烘焙环境数据，通过可转移缓冲区交回主线程，再构建 HalfFloat `DataTexture`。Worker 不创建 WebGL context。 |
-| **分帧编译与首次绘制预热** | 按材质与顶点布局选取代表对象，分批调用 `compileAsync`；再在 `32 × 32` 区域分批执行真实绘制，提前准备首次使用所需的图形状态。 |
-| **真实任务驱动的加载状态** | 模块、字体、场景、表面资源、Shader 与预热分别记录进度；资源准备和进入状态分开管理，失败资源可记录回退。 |
-| **按场景安排生命周期** | 主站展台展示微缩模型；三个完整作品通过独立页面打开，各自管理渲染、声音与物理，不在主站同时运行全部独立应用。 |
-
-[阅读实现细节与设计取舍 →](docs/ENGINEERING.md)
-
-## 三个独立作品
+## Four graphics experiments
 
 <table>
 <tr>
-<td width="33%" align="center">
-<a href="https://playertc5418-art.github.io/form-field/sites/blackhole/"><img src="docs/readme/singularity.webp" alt="奇点：黑洞与吸积盘的实时画面" width="100%" /></a>
-<br /><a href="https://playertc5418-art.github.io/form-field/sites/blackhole/">奇点 ↗</a>
+<td width="50%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/#lab"><img src="docs/readme/lab-fluid.gif" alt="Fluid typography responding to pointer movement" width="100%" /></a>
+<br /><strong>01 / TYPE · FLUID</strong>
 </td>
-<td width="33%" align="center">
-<a href="https://playertc5418-art.github.io/form-field/sites/gravity-off/"><img src="docs/readme/gravity-off.gif" alt="GRAVITY OFF：真实页面释放字形后的物理运动" width="100%" /></a>
-<br /><a href="https://playertc5418-art.github.io/form-field/sites/gravity-off/">失重 ↗</a>
+<td width="50%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/#lab"><img src="docs/readme/lab-particles.gif" alt="GPU particle morphing and a pointer-triggered impulse" width="100%" /></a>
+<br /><strong>02 / PARTICLES</strong>
 </td>
-<td width="33%" align="center">
-<a href="https://playertc5418-art.github.io/form-field/sites/xiaojian/"><img src="docs/readme/xiaojian.webp" alt="小间：微缩世界收藏室的真实页面" width="100%" /></a>
-<br /><a href="https://playertc5418-art.github.io/form-field/sites/xiaojian/">小间 ↗</a>
+</tr>
+<tr>
+<td width="50%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/#lab"><img src="docs/readme/lab-reveal.webp" alt="Image reveal with a halftone field and a local lens" width="100%" /></a>
+<br /><strong>03 / MEDIA REVEAL</strong>
+</td>
+<td width="50%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/#lab"><img src="docs/readme/lab-material.webp" alt="A sliced material study of a sculptural form" width="100%" /></a>
+<br /><strong>04 / MATERIAL STUDY</strong>
 </td>
 </tr>
 </table>
 
-- **奇点 · SINGULARITY** — `Three.js` · `Web Audio`。黑洞视觉与距离联动声景；镜头靠近时，声音的强度与音色一起变化，让距离也能被听见。
-- **GRAVITY OFF** — `Three.js` · `Rapier`。把文字变成可操作的三维物体，通过释放、拖动、改变重力与重新组装，探索字形和物理之间的关系。
-- **小间 · 微缩世界收藏室** — `WebGL` · `Scene Design`。把铁路、海边、雨夜、神社与圣诞小屋收藏进浏览器，让光线、天气和声音参与空间叙事。
+- **Fluid typography.** A half-float ping-pong field combines semi-Lagrangian advection, pointer splats, and dissipation. The text shader samples velocity for UV displacement and RGB separation.
+- **Particle morphing.** Precomputed text and sculpture targets live in buffer attributes. A vertex shader handles staggered interpolation, repulsion, and shockwaves; uniforms drive the animation.
+- **Image reveal.** Luminance-shaped halftone dots transition into the source image. A pointer lens adds local refraction and chromatic separation.
+- **Material study.** Solid, line, and point layers derive from one base form, sharing twist and clipping controls across five visual states.
+
+## Prepared for the first interaction
+
+![Environment preparation, incremental compilation, draw priming, and renderer handoff](docs/readme/render-pipeline.svg)
+
+- **One renderer across the opening and home scene.** A shared canvas changes ownership with explicit render-state restoration.
+- **Worker-side environment preparation.** Fetch, validation, and decompression run off the main thread; transferred buffers become textures on the main thread.
+- **Preparation in small batches.** Representative shader variants compile incrementally, followed by small-area draw priming. Resource tasks gate the reveal, with pause, cancellation, and fallback paths.
+
+[Read the implementation and trade-offs →](docs/ENGINEERING.md)
+
+## Three standalone worlds
+
+<table>
+<tr>
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/sites/blackhole/"><img src="docs/readme/singularity.webp" alt="Singularity: a black hole and accretion disk" width="100%" /></a>
+<br /><a href="https://playertc5418-art.github.io/afterhours/sites/blackhole/">SINGULARITY ↗</a>
+</td>
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/sites/gravity-off/"><img src="docs/readme/gravity-off.gif" alt="Gravity Off: released three-dimensional letters" width="100%" /></a>
+<br /><a href="https://playertc5418-art.github.io/afterhours/sites/gravity-off/">GRAVITY OFF ↗</a>
+</td>
+<td width="33%" align="center">
+<a href="https://playertc5418-art.github.io/afterhours/sites/xiaojian/"><img src="docs/readme/xiaojian.webp" alt="Xiaojian: a collection of miniature worlds" width="100%" /></a>
+<br /><a href="https://playertc5418-art.github.io/afterhours/sites/xiaojian/">小间 / XIAOJIAN ↗</a>
+</td>
+</tr>
+</table>
+
+**Singularity** pairs black-hole visuals with distance-responsive sound. **Gravity Off** combines Three.js and Rapier for draggable, releasable, reassemblable type. **Xiaojian** collects miniature scenes shaped by light, weather, and sound.
+
+The main site displays their miniatures; each full experience opens in its own page and manages its own runtime.
+
+<p align="center"><code>React</code> · <code>TypeScript</code> · <code>Three.js</code> · <code>GLSL</code> · <code>GSAP</code> · <code>Lenis</code></p>
 
 <details>
-<summary><strong>适配、验证与项目说明</strong></summary>
+<summary><strong>Project stories, scope &amp; credits</strong></summary>
 
-- 为桌面与触屏提供相应布局，并处理减少动态效果、WebGL 不可用、加载失败和重试状态。
-- 主站案例弹层处理焦点返回、原生滚动及图片查看；动画准备流程包含暂停、取消和延迟释放处理。
-- 当前发布检查覆盖 Windows Chromium 桌面和手机尺寸模拟。模拟结果不代表真实手机、Safari 或低端 GPU 的表现，也不承诺所有设备固定帧率。
-- 本仓库用于发布网站的静态产物；技术拆解介绍对应实现，不提供源码工程的安装命令。
+The portfolio also presents **智盾 SOC**, **HEMW**, and **CodeEdu–Trace**, with implementation notes and evidence boundaries. Their backends and models do not run inside GitHub Pages.
 
-</details>
+This repository distributes the static site. Desktop and touch layouts, reduced motion, and WebGL fallback paths are implemented; recorded checks cover Windows Chromium and mobile-size emulation, rather than a complete physical-device matrix.
 
-<details>
-<summary><strong>素材与许可</strong></summary>
+Previews are actual browser captures. The pipeline image is an architectural illustration. Shared-renderer claims apply to the opening and host site; Rapier belongs to the independent Gravity Off experience.
 
-第三方代码、字体、音乐及素材的来源和许可随站点保留，相关记录见 [licenses](licenses/)、[材质记录](materials/atelier/) 及各独立作品目录。
-
-背景音乐：Scott Buckley — **Meanwhile**。[作者与许可署名](https://playertc5418-art.github.io/form-field/audio/credits.html)。黑洞声景的来源与署名保留在奇点作品内。
-
-本 README 的体验预览录自当前发布页面；渲染流程图为实现关系的示意。
+Music: **Meanwhile** by Scott Buckley — [attribution and license](https://playertc5418-art.github.io/afterhours/audio/credits.html). Singularity retains its NASA/Chandra sonification credits. Third-party font, code, and material notices remain with the site.
 
 </details>

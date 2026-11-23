@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./World-BY0irhT0.js","./three-C7fIRf5V.js","./motion-DpMaEHIX.js","./ProjectDetail-D4t_bQU0.js","./ProjectDetail-CRF1FRtu.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./World-CwIouaRw.js","./three-C7fIRf5V.js","./motion-DpMaEHIX.js","./ProjectDetail-DSz7dAs6.js","./ProjectDetail-CRF1FRtu.css"])))=>i.map(i=>d[i]);
 import { g as gsapWithCSS, L as Lenis } from './motion-DpMaEHIX.js';
 import { W as WebGLRenderer, L as LinearSRGBColorSpace, S as SRGBColorSpace, N as NoToneMapping, A as ACESFilmicToneMapping, P as PCFSoftShadowMap, a as Scene, b as PerspectiveCamera, V as Vector4, c as PlaneGeometry, d as Vector3, M as Mesh, T as TubeGeometry, e as LineCurve3, C as CylinderGeometry, I as InstancedBufferAttribute, B as BufferGeometry, f as BufferAttribute, g as LineSegments, h as WebGLRenderTarget, H as HalfFloatType, U as UnsignedByteType, O as OrthographicCamera, i as Color, j as ShaderMaterial, k as Vector2, l as InstancedBufferGeometry, m as NormalBlending, n as AdditiveBlending, o as OneMinusSrcAlphaFactor, p as OneFactor, Z as ZeroFactor, q as NoBlending, r as CustomBlending } from './three-C7fIRf5V.js';
 
@@ -24479,10 +24479,8 @@ function Header({ sound, onSound, status = "off", error = "" }) {
         window.dispatchEvent(new Event("secret-mode"));
         clicks.current = 0;
       }
-    }, "aria-label": "FORM / FIELD，返回首页", children: [
-      "FORM ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "/" }),
-      " FIELD",
+    }, "aria-label": "AFTERHOURS，返回首页", children: [
+      "AFTERHOURS",
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "brand-dot" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { "aria-label": "主导航", children: SECTIONS.map(([id, label]) => /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `#${id}`, "aria-current": active === id ? "location" : void 0, onClick: (e) => {
@@ -24698,10 +24696,10 @@ function Layer({ front, worldPending }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx("i", {}),
         "CREATIVE DEVELOPER / 2026"
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: `hero-title${front ? " hero-title-front" : ""}`, "aria-label": front ? "Beyond the screen." : void 0, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "word", "aria-hidden": "true", children: "BEYOND" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: `hero-title${front ? " hero-title-front" : ""}`, "aria-label": front ? "AFTERHOURS. Ideas take shape after dark." : void 0, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "word", "aria-hidden": "true", children: "AFTER" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "word", "aria-hidden": "true", children: [
-          "THE SCREEN",
+          "HOURS",
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "accent-dot", children: "." })
         ] })
       ] })
@@ -24711,7 +24709,7 @@ function Layer({ front, worldPending }) {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hero-bottom", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
           worldPending && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hero-scene-loading", role: "status", children: "3D 场景准备中" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hero-chinese", children: "用代码，构筑可感知的空间。" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hero-chinese", children: "入夜，让想法成形。" })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "explore-link", onClick: () => navigateTo("projects"), "data-magnetic": true, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "circle-arrow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow, {}) }),
@@ -24941,7 +24939,7 @@ function Lab() {
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "stage-hint mono", children: exp.hint }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fallback-art", "aria-hidden": "true", children: active === 1 ? "CODE" : "FORM / FIELD" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "fallback-art", "aria-hidden": "true", children: active === 1 ? "CODE" : "AFTERHOURS" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("details", { className: "method-panel", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("summary", { className: "mono", children: [
@@ -25322,7 +25320,7 @@ function ReturnJourney() {
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "footer-bottom mono", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-        "FORM / FIELD © 2026 · ",
+        "AFTERHOURS © 2026 · ",
         /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "./audio/credits.html", target: "_blank", rel: "noopener noreferrer", "aria-label": "背景音乐 Meanwhile 的作者与许可", children: "MUSIC ↗" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => navigateTo("index"), children: [
@@ -27631,9 +27629,7 @@ function Opening({ onComplete, reduced, onRoadReady, sound }) {
       ) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "brand", "aria-hidden": "true", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
-          "FORM ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "brand-divider", children: "/" }),
-          " FIELD",
+          "AFTERHOURS",
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "brand-dot", children: "." })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "brand-signature", children: "TC" })
@@ -27830,8 +27826,8 @@ function DebugPanel() {
   ] }) : null;
 }
 
-const World = reactExports.lazy(() => __vitePreload(() => import('./World-BY0irhT0.js'),true              ?__vite__mapDeps([0,1,2]):void 0,import.meta.url));
-const ProjectDetail = reactExports.lazy(() => __vitePreload(() => import('./ProjectDetail-D4t_bQU0.js'),true              ?__vite__mapDeps([3,2,1,4]):void 0,import.meta.url));
+const World = reactExports.lazy(() => __vitePreload(() => import('./World-CwIouaRw.js'),true              ?__vite__mapDeps([0,1,2]):void 0,import.meta.url));
+const ProjectDetail = reactExports.lazy(() => __vitePreload(() => import('./ProjectDetail-DSz7dAs6.js'),true              ?__vite__mapDeps([3,2,1,4]):void 0,import.meta.url));
 function App() {
   const [, setReady] = reactExports.useState(false), [, setStage] = reactExports.useState("INITIALIZING WEBGL"), [fallback, setFallback] = reactExports.useState(false), [detail, setDetail] = reactExports.useState(null);
   const transition = reactExports.useRef(null), origin = reactExports.useRef(null), busy = reactExports.useRef(false);

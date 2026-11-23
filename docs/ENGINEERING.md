@@ -1,81 +1,87 @@
-# FORM / FIELD · 技术拆解
+# AFTERHOURS · Engineering notes
 
-[返回 README](../README.md) · [体验网站](https://playertc5418-art.github.io/form-field/)
+**English** · [简体中文](ENGINEERING.zh-CN.md)
 
-这座建筑既是画面，也是界面。它把渲染、加载、导航和内容编排放进同一段体验，技术选择围绕一个目标展开：让空间里的操作能够继续成为页面里的阅读。
+[Back to README](../README.md) · [Explore the website](https://playertc5418-art.github.io/afterhours/)
 
-本仓库提供静态发布产物。下文中的 `RenderHost`、`compileIncrementally` 等名称指实现中的模块或函数，不是当前仓库中的源码入口。
+## Spatial navigation
 
-## 1. 一个 renderer，两个阶段
+Raycast proxies represent interactive spaces in the architecture. Their projected positions change with the scene, keeping interaction in the same perspective as the visible rooms.
 
-开场公路与建筑首页共用 `RenderHost` 创建的 `WebGLRenderer`。进入首页时，canvas 被交给主站容器，并切换输出色彩、tone mapping、阴影与曝光等配置。
+Room inspection and object activation are separate actions:
 
-共享 context 需要明确管理图形状态。每次进入对应渲染阶段，会恢复 render target、viewport、scissor、自动清屏等状态，避免上一个阶段留下的设置影响下一个场景。
-
-准备期间的调度顺序是：先执行主站所需的准备绘制，再用开场画面覆盖，让主站可以在正式出现前完成部分首次使用工作。这个共享范围是开场与主站；三个独立作品在各自页面中运行。
-
-## 2. 把环境数据准备交给 Worker
-
-烘焙环境数据读取与 gzip 解压发生在 Worker 中。Worker 检查数据头、尺寸和字节长度，并用 transferable `ArrayBuffer` 传回结果；主线程据此创建 HalfFloat `DataTexture`，供反射环境使用。
-
-Worker 处理 I/O 和 CPU 数据准备，不创建 WebGL context，也不负责 GPU 上传。这个边界有助于把资源处理与实际渲染职责分开。请求失败、数据格式不匹配或 Worker 出错时，加载状态记录回退结果。
-
-## 3. Shader 编译之后，还要准备真实绘制
-
-只调用编译不能覆盖首次绘制涉及的所有驱动状态。准备流程因此分成两部分：
-
-1. **分帧编译**：按材质、对象类型、实例化属性、顶点和 morph 布局去重，挑选代表对象，以每批 8 个对象调用 `compileAsync`。批次之间让出动画帧。
-2. **小区域绘制预热**：每批最多 4 个对象，在 `32 × 32` 的 viewport/scissor 区域执行真实绘制，并准备相关阴影状态。
-
-准备完成后恢复对象的可见性与裁剪状态，以及 renderer 的 target/scissor 设置。暂停或页面进入后台时，预热绘制等待恢复；取消操作通过 `AbortSignal` 退出。
-
-这是把部分工作前移和切分，并不意味着消除了全部开销。Shader 驱动、缓存、GPU、网络和设备都会影响实际准备时间；README 不将某一次本机采样转换成固定 FPS 承诺。
-
-## 4. 由实际任务决定何时揭示
-
-加载状态分别跟踪模块、字体、场景、表面资源、Shader 和预热任务。资源集合会记录是否完成、是否采用回退；进度由任务状态汇总。
-
-准备完成、画面已呈现和用户已进入是三个不同状态。当前状态机中的核心约束是：
-
-```js
-// 摘自实现；省略状态通知与其他任务记录。
-present() {
-  if (!snapshot.ready && !state.failed) return false;
-  state.presented = true;
-  publish();
-  return true;
-}
-
-enter() {
-  if (!state.presented) return false;
-  state.entered = true;
-  publish();
-  return true;
-}
+```text
+overview → entering → inspecting → handoff
 ```
 
-因此，正常揭示依赖实际准备结果。跳过、减少动态效果和失败回退具有各自处理路径，不能把所有入口简化成固定秒数的动画。
+The transitions coordinate camera motion, scroll ownership, and focus. Inspection provides a back action and Escape handling; drag thresholds distinguish orbiting from clicking. Object poses and screen projections then help connect the three-dimensional scene to DOM chapters. GSAP and Lenis coordinate animation and scroll; Three.js owns the spatial view.
 
-## 5. 从场景对象到页面内容
+## Graphics experiments
 
-首页使用 Raycaster 测试空间代理，区分房间聚焦与内部物件激活。聚焦过程中管理滚动、返回操作和焦点；拖拽环视会区分移动与点击，减少误触。
+### Fluid typography
 
-后续接力让场景中的屏幕、装置或物件与 DOM 章节发生关系。相机、物件姿态、章节进度和交互所有权需要协调，正向进入与反向返回都要恢复正确状态。GSAP 与 Lenis 参与时间和滚动编排，Three.js 负责空间与投影。
+Two half-float render targets alternate between read and write. A fragment shader samples backward through the previous velocity field for semi-Lagrangian advection, adds a rotation response from neighboring velocity differences, and injects pointer forces through a Gaussian splat. Dissipation and edge attenuation gradually settle the field.
 
-## 6. 三个作品的技术边界
+The text shader samples velocity and ink to displace UVs, separate RGB channels, and leave a subtle trail. A low-resolution simulation limits the field-update cost independently of the display resolution; the final display pass still has screen-space rendering costs.
 
-| 作品 | 重点 | 与主站的关系 |
-| --- | --- | --- |
-| 奇点 | 黑洞画面、镜头距离与声音参数之间的联动 | 独立页面管理场景与音频；主站展台只展示入口模型 |
-| GRAVITY OFF | Three.js 渲染与 Rapier 物理，释放、拖动、重力切换与重组 | 完整物理模拟运行在作品页面，不在主站字形模型中重复运行 |
-| 小间 | 微缩场景的尺度、材质、灯光、天气和声音编排 | 从收藏室进入各个世界，独立管理场景运行 |
+This is a simplified interactive flow field, without a full divergence/pressure/projection pipeline. If the required floating-point render targets are unavailable, the text shader falls back to an analytical pointer ripple.
 
-主站不会为了展示三个入口就同时运行三个完整应用。这保留了每个作品的交互与生命周期，也控制了主站需要承担的工作。
+### GPU particle morphing
 
-## 验证范围
+Canvas2D text sampling and sculpture geometry provide target point sets. Buffer attributes hold those targets, scatter directions, and random seeds. During animation, the vertex shader handles per-particle interpolation delays, scatter, pointer repulsion, and a radial shockwave.
 
-这份文档依据发布版本所用实现与对应项目记录整理，不是新一轮性能基准报告。README 的动图来自对应静态发布版本的实际浏览器交互。
+The CPU updates uniforms rather than rebuilding and uploading every particle position each frame. Target sampling and buffer construction still happen during preparation. A lower particle count is selected for the mobile branch.
 
-发布检查涵盖 Windows Chromium 桌面、手机尺寸模拟、主要入口与案例详情；项目另有加载、取消、音乐、减少动态效果及无 WebGL 回退相关验证脚本与历史记录。不同版本的历史检查不能当作当前版本全部重新通过，真实手机、Safari 和低端 GPU 也需要独立验收。
+### Image reveal and material study
 
-[返回网站 ↗](https://playertc5418-art.github.io/form-field/)
+The reveal shader derives halftone-dot sizes from image luminance. A scan front blends noise, grid, halftone, and source-image stages. A local pointer lens changes UV sampling and separates color channels to produce screen-space refraction and dispersion.
+
+The material study derives solid, line, and point representations from one base form. The layers synchronize time, pointer, scroll, and twist inputs, with clipping and opacity controlling the visual states. Invisible layers stop participating in drawing. Derived line/point geometry means this is not literally a single geometry object for every representation.
+
+## Renderer and preparation
+
+### Shared renderer, explicit state
+
+The opening road and architecture share the `WebGLRenderer` created by `RenderHost`. Home-scene preparation runs first; the opening then draws over it before presentation. Once the home scene takes over, the canvas moves to its container.
+
+The handoff restores render target, viewport, scissor, clearing behavior, output color space, tone mapping, exposure, and shadows. Sharing a context makes these state boundaries explicit. The claim applies to the opening and host site; standalone experiences own their own runtimes.
+
+### Worker-side environment data
+
+A Worker fetches baked environment data, checks headers, dimensions, and byte lengths, and decompresses gzip when required. Transferable buffers return to the main thread, which constructs half-float textures. The Worker does not create a WebGL context or perform GPU uploads. Failures settle resources through the fallback path.
+
+### Incremental compilation and draw priming
+
+Compilation candidates are deduplicated by material, object type, instancing attributes, vertex layout, and morph layout. Batches of eight representatives call `compileAsync`, yielding between batches.
+
+Compilation is followed by actual framebuffer draws: up to four objects per batch, through a `32 × 32` viewport/scissor region, including shadow-state preparation. This exercises first-use work beyond program compilation; it is not the resolution of the final scene.
+
+Preparation restores object visibility, culling, targets, and scissor state. Paused or hidden pages wait before priming; cancellation uses `AbortSignal`. Resource release waits for relevant in-flight compilation work.
+
+### Readiness before reveal
+
+Modules, fonts, scene construction, surface resources, shaders, and warm-up each report progress. Resources record completion and fallback. The normal path separates three states:
+
+```text
+ready → presented → entered
+```
+
+Skip, reduced-motion, and failure paths are handled separately. The visible loading sequence does not substitute for actual preparation readiness.
+
+These choices move and distribute work. Network conditions, drivers, shader caches, and GPU capability still influence performance; no fixed frame rate is implied.
+
+## Standalone experiences
+
+- **Singularity:** Three.js imagery and camera control with distance-responsive Web Audio.
+- **Gravity Off:** Three.js rendering and Rapier simulation for release, drag, gravity changes, pause, and reassembly.
+- **Xiaojian:** miniature worlds combining geometry, materials, lighting, weather, and sound.
+
+Their host-site miniatures are navigation objects. The main page does not run all three full applications or duplicate the standalone physics simulation.
+
+## Scope
+
+The repository distributes static output, rather than the complete development project. Internal module names explain the implementation; they are not links to public source files in this repository.
+
+Recorded checks cover Windows Chromium and mobile-size emulation. Physical phones, Safari, and low-end GPUs need separate acceptance. This document adds no new benchmark claims.
+
+[Back to README](../README.md)
