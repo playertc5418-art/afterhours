@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./World-BZy2MgRz.js","./three-C7fIRf5V.js","./motion-DpMaEHIX.js","./ProjectDetail-Z39Vx4pd.js","./ProjectDetail-CRF1FRtu.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./World-C9Mo80hw.js","./three-C7fIRf5V.js","./motion-DpMaEHIX.js","./ProjectDetail-B6b1qruU.js","./ProjectDetail-CRF1FRtu.css"])))=>i.map(i=>d[i]);
 import { g as gsapWithCSS, L as Lenis } from './motion-DpMaEHIX.js';
 import { W as WebGLRenderer, L as LinearSRGBColorSpace, S as SRGBColorSpace, N as NoToneMapping, A as ACESFilmicToneMapping, P as PCFSoftShadowMap, a as Scene, b as PerspectiveCamera, V as Vector4, c as PlaneGeometry, d as Vector3, M as Mesh, T as TubeGeometry, e as LineCurve3, C as CylinderGeometry, I as InstancedBufferAttribute, B as BufferGeometry, f as BufferAttribute, g as LineSegments, h as WebGLRenderTarget, H as HalfFloatType, U as UnsignedByteType, O as OrthographicCamera, i as Color, j as ShaderMaterial, k as Vector2, l as InstancedBufferGeometry, m as NormalBlending, n as AdditiveBlending, o as OneMinusSrcAlphaFactor, p as OneFactor, Z as ZeroFactor, q as NoBlending, r as CustomBlending } from './three-C7fIRf5V.js';
 
@@ -27826,8 +27826,8 @@ function DebugPanel() {
   ] }) : null;
 }
 
-const World = reactExports.lazy(() => __vitePreload(() => import('./World-BZy2MgRz.js'),true              ?__vite__mapDeps([0,1,2]):void 0,import.meta.url));
-const ProjectDetail = reactExports.lazy(() => __vitePreload(() => import('./ProjectDetail-Z39Vx4pd.js'),true              ?__vite__mapDeps([3,2,1,4]):void 0,import.meta.url));
+const World = reactExports.lazy(() => __vitePreload(() => import('./World-C9Mo80hw.js'),true              ?__vite__mapDeps([0,1,2]):void 0,import.meta.url));
+const ProjectDetail = reactExports.lazy(() => __vitePreload(() => import('./ProjectDetail-B6b1qruU.js'),true              ?__vite__mapDeps([3,2,1,4]):void 0,import.meta.url));
 function App() {
   const [, setReady] = reactExports.useState(false), [, setStage] = reactExports.useState("INITIALIZING WEBGL"), [fallback, setFallback] = reactExports.useState(false), [detail, setDetail] = reactExports.useState(null);
   const transition = reactExports.useRef(null), origin = reactExports.useRef(null), busy = reactExports.useRef(false);

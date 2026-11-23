@@ -1,4 +1,4 @@
-import { s as startup, g as getRenderHost, r as runtime, a as reactExports, p as projects, j as jsxRuntimeExports, l as lockRoomScroll, b as roomJourneyState, e as exitRoom, f as finishRoomTransition } from './index-Cnjb831L.js';
+import { s as startup, g as getRenderHost, r as runtime, a as reactExports, p as projects, j as jsxRuntimeExports, l as lockRoomScroll, b as roomJourneyState, e as exitRoom, f as finishRoomTransition } from './index-Cu9ZWOIE.js';
 import { D as DataTexture, R as RGBAFormat, H as HalfFloatType, s as CubeUVReflectionMapping, L as LinearSRGBColorSpace, t as LinearFilter, G as Group, u as Texture, a as Scene, v as MeshDepthMaterial, w as DoubleSide, x as BackSide, F as FrontSide, y as RGBADepthPacking, z as InstancedMesh, M as Mesh, h as WebGLRenderTarget, d as Vector3, B as BufferGeometry, E as Float32BufferAttribute, j as ShaderMaterial, n as AdditiveBlending, J as Points, g as LineSegments, k as Vector2, K as MathUtils, b as PerspectiveCamera, O as OrthographicCamera, c as PlaneGeometry, Q as Matrix4, X as Quaternion, Y as UniformsUtils, _ as Euler, $ as Box3, V as Vector4, a0 as HemisphereLight, a1 as DirectionalLight, a2 as Material, a3 as MeshStandardMaterial, a4 as MeshBasicMaterial, a5 as MeshPhysicalMaterial, a6 as PMREMGenerator, i as Color, a7 as BoxGeometry, a8 as CanvasTexture, S as SRGBColorSpace, a9 as RepeatWrapping, f as BufferAttribute, C as CylinderGeometry, aa as Plane, ab as OctahedronGeometry, ac as CircleGeometry, ad as DodecahedronGeometry, ae as CatmullRomCurve3, T as TubeGeometry, af as Shape, ag as ShapeGeometry, ah as ExtrudeGeometry, ai as PointLight, aj as NoColorSpace, ak as TextureLoader, al as Path, am as TorusGeometry, an as SphereGeometry, ao as RingGeometry, ap as Object3D, aq as IcosahedronGeometry, ar as ConeGeometry, as as EdgesGeometry, at as LineBasicMaterial, au as Fog, av as Raycaster, aw as MeshLambertMaterial, A as ACESFilmicToneMapping, P as PCFSoftShadowMap } from './three-C7fIRf5V.js';
 import './motion-DpMaEHIX.js';
 
@@ -3227,10 +3227,16 @@ function acquire(asset, map) {
       finish = resolve;
     });
     startup.resource(path);
-    const texture = loader.load(path, () => {
-      startup.settleResource(path);
+    let settled = false, deadline;
+    const settle = (fallback2) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(deadline);
+      startup.settleResource(path, fallback2);
       finish();
-    }, void 0, () => {
+    };
+    const fallback = () => {
+      if (settled) return;
       const canvas = document.createElement("canvas");
       canvas.width = canvas.height = 1;
       const context = canvas.getContext("2d");
@@ -3238,19 +3244,21 @@ function acquire(asset, map) {
       context.fillRect(0, 0, 1, 1);
       texture.image = canvas;
       texture.needsUpdate = true;
-      startup.settleResource(path, true);
+      settle(true);
       console.warn("Local material fallback:", path);
-      finish();
-    });
+    };
+    const texture = loader.load(path, () => settle(false), void 0, fallback);
+    deadline = window.setTimeout(fallback, 15e3);
     texture.colorSpace = map === "diffuse" ? SRGBColorSpace : NoColorSpace;
     texture.wrapS = texture.wrapT = RepeatWrapping;
     texture.anisotropy = 4;
-    entry = { texture, ready, users: 0 };
+    entry = { texture, ready, users: 0, cancelDeadline: () => window.clearTimeout(deadline) };
     cache.set(path, entry);
   }
   entry.users++;
   return { texture: entry.texture, release() {
     if (--entry.users === 0) {
+      entry.cancelDeadline();
       entry.texture.dispose();
       if (cache.get(path) === entry) cache.delete(path);
     }
