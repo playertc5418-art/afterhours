@@ -9,9 +9,9 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">进入网站 ↗</a> · <a href="docs/ENGINEERING.zh-CN.md">工程笔记</a> · <a href="docs/CREDITS.zh-CN.md">来源与署名</a> · <a href="CONTRIBUTING.zh-CN.md">参与贡献</a></p>
 
-这里不只展示结果，也分享结果怎样产生：空间如何成为导航，文字如何被流场搅动，粒子怎样在 GPU 上变形，以及场景如何准备、接力与释放。
+这是一个可穿梭的空间作品集，也是一组图形与交互工程实验：建筑空间导航、交互着色器、GPU 粒子变形、揭幕前的分批准备，以及带完整生命周期的小世界。
 
-下面的九段 GIF 均来自真实浏览器操作；为阅读而缩放、抽帧，不能用来衡量帧率。渲染准备图是架构示意。
+下面九段 GIF 均录自真实浏览器操作，经缩放与抽帧用于阅读展示，不用于测算帧率；渲染准备图为结构示意。
 
 **浏览路线：** [空间导航](#spatial-navigation) · [渲染器接力](#shared-renderer) · [流体文字](#fluid-typography) · [GPU 粒子](#particle-morphing) · [图像显影](#image-reveal) · [材质实验](#material-study) · [奇点](#singularity) · [失重文字](#gravity-off) · [小间](#xiaojian)
 
@@ -21,11 +21,9 @@
 
 [![01 / 用建筑组织导航](docs/readme/spatial-interaction.gif)](https://playertc5418-art.github.io/afterhours/)
 
-点击房间进入检视，再返回建筑总览。房间和物件承担内容入口，空间本身参与导航。
+房间与内部物件就是内容入口：点进房间检视空间，再回到建筑总览，不用丢失当前上下文。
 
-- **实现思路。** Three.js 射线命中代理随场景透视变化；状态机区分总览、进入、检视与章节接力，统一协调相机、滚动控制和 DOM 焦点。
-- **设计取舍。** 先看房间，再决定是否激活物件。拖动阈值区分旋转与点击，返回按钮和 Escape 提供退出路径。
-- **动手体验。** 进入房间、观察物件，再返回总览。动图展示房间进出，章节接力的处理见工程笔记。
+Three.js 射线代理随场景透视投影变化，让命中区域贴合画面视角。状态机把 `overview`、`entering`、`inspecting` 和 `handoff` 拆开，统一联动相机位移、滚动归属和 DOM 焦点；拖拽阈值用来区分环视与点击，返回按钮和 `Escape` 随时退出检视。进房间、看物件再退回总览即可体验；章节接力的细节见[工程笔记](docs/ENGINEERING.zh-CN.md)。
 
 <a id="shared-renderer"></a>
 
@@ -33,11 +31,9 @@
 
 [![02 / 开场与首页共享渲染器](docs/readme/opening.gif)](https://playertc5418-art.github.io/afterhours/)
 
-光轨开场把视线交给夜间工坊。这里的重点除了动画，还包括两套渲染逻辑如何交接同一个画布。
+光轨开场把画布交给夜间工坊，开场与建筑主站共用 `RenderHost` 创建的同一份 `WebGLRenderer`。提前准备主站场景省去了另建主渲染上下文的开销，但交接时必须恢复 render target、viewport、scissor、色彩空间、tone mapping、曝光和阴影状态，防止前一阶段的配置串到下一阶段。
 
-- **实现思路。** RenderHost 管理开场与首页共用的 WebGLRenderer。接力时恢复渲染目标、视口、裁剪区、色彩空间、色调映射、曝光与阴影设置，再由首页接管画布。
-- **设计取舍。** 在揭幕前准备首页，无需为主站另建一份渲染上下文；代价是必须明确恢复渲染状态，避免上一场景遗留设置影响下一场景。
-- **适用范围。** 共享范围仅为开场与主站，独立作品各自管理运行时。开场道路和光轨改编自 **David Haz / React Bits 的 [Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx)**，不是本网站从零原创。所用版本为 MIT + Commons Clause；[来源、许可与本地改动](docs/CREDITS.zh-CN.md)。
+渲染器共享仅限开场与主站，独立作品各自维护运行时。开场道路与光轨改编自 **David Haz / React Bits 的 [Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx)**（锁定版本许可为 MIT + Commons Clause；详见[来源、许可与本地改动](docs/CREDITS.zh-CN.md)）。
 
 <a id="fluid-typography"></a>
 
@@ -45,11 +41,9 @@
 
 [![03 / 可以搅动的流体文字](docs/readme/lab-fluid.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-移动指针，文字随流场弯曲、产生色散，注入的扰动力逐渐衰减，画面重新平静。
+在文字上滑动指针，字形随之弯曲并产生 RGB 色散，扰动随衰减慢慢平息。
 
-- **实现思路。** 两张半浮点渲染目标交替读写。半拉格朗日回溯搬运上一帧的场，高斯形状的指针注入局部力，显示着色器再用流场推动 UV 并分离 RGB 通道。
-- **设计取舍。** 桌面流场网格为 256 × 144，模拟分辨率与显示分辨率分开；最终的全屏绘制仍受视口大小影响，不能把它说成整体 GPU 成本恒定。
-- **能力边界。** 这是交互流场，没有完整的散度、压力与投影求解流程；浮点渲染目标不可用时，退回解析式指针波纹。
+两张半浮点 render target 交替读写：半拉格朗日回溯搬运上一帧速度场，高斯指针笔刷注入局部推力，显示着色器再据此偏移 UV 并分离 RGB 通道。桌面流场网格设为 `256 × 144`，把场更新分辨率与显示分辨率分开，不过全屏显示 pass 仍会随视口尺寸变化。这里做的是简化交互流场，不包含完整的散度、压力与投影求解；缺少所需浮点渲染目标时，会回退到解析式指针涟漪。
 
 <a id="particle-morphing"></a>
 
@@ -57,11 +51,9 @@
 
 [![04 / GPU 粒子形变](docs/readme/lab-particles.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-同一批粒子在 CODE、FORM 与雕塑之间变形。指针把粒子推开，点击则沿形体释放一圈扩散冲击波。
+同一批粒子在 `CODE`、`FORM` 与雕塑形体之间切换，指针会把粒子推开，点击则激起向外扩散的冲击波。
 
-- **实现思路。** 文字采样和雕塑几何提供目标点集；缓冲属性保存目标坐标、散射方向与随机种子，顶点着色器组合逐粒子延迟、指针排斥和径向冲量。
-- **设计取舍。** CPU 每帧更新 uniform，不逐粒子重传坐标。配置为桌面 10,000 粒子、移动分支 4,200 粒子；目标采样与缓冲创建仍需在准备阶段完成。
-- **动手体验。** 切换目标，调节 DISPERSE，并通过点击或键盘触发 IMPULSE。
+Canvas2D 字形采样与雕塑几何提供目标点位，写入顶点缓冲属性，并附带散射方向与逐粒子随机种子。顶点着色器在 GPU 端完成错峰插值、指针排斥与径向冲击波，CPU 通过 uniform 传入当前动画参数，不必逐帧重传全部粒子坐标。桌面配置为 `10,000` 颗粒子，移动分支为 `4,200` 颗，采样与缓冲构建仍在准备阶段完成。切换目标、调节 `DISPERSE`，再点击或在实验面板中按空格或回车触发 `IMPULSE`。
 
 <a id="image-reveal"></a>
 
@@ -69,11 +61,9 @@
 
 [![05 / 从信号到图像的显影](docs/readme/lab-reveal.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-图像经过噪波、网格、半色调点阵逐渐显影，指针下方的局部透镜继续改变图像采样。
+画面从噪波、网格与半色调点阵逐步显影，指针经过处还会叠加局部透镜效果。
 
-- **实现思路。** 图像亮度决定网格内的圆点大小，扫描前沿把信号状态混合为原图，指针距离控制 UV 折射与边缘色散。
-- **设计取舍。** 同一张图片同时驱动半色调和最终画面；按宽高比计算 cover 采样，面板变形时仍保持合理构图。
-- **能力边界。** 透镜属于屏幕空间着色效果，并非真实玻璃的物理光线追踪。拖动 REVEAL 可直接检查整个显影过程。
+原图亮度决定网格内圆点大小，扫描前沿把信号阶段过渡到原图，指针距离则控制 UV 折射与色散。同一张图片同时驱动半色调与最终显影，并按宽高比做 cover 采样以适应面板尺寸变化。透镜属于屏幕空间着色效果，不是真实玻璃光线追踪；拖动 `REVEAL` 就能直接查看各阶段变化。
 
 <a id="material-study"></a>
 
@@ -81,11 +71,9 @@
 
 [![06 / 一个形体，五种材质状态](docs/readme/lab-material.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-在实体、线框、切片、点云与 X 光状态之间切换，同一形体以不同方式暴露表面、结构和内部。
+在实体、线框、切片、点云与 X 光五种状态间切换，从表层、结构到内部观察同一个形体。
 
-- **实现思路。** 实体、线与点表示从同一基础形体派生；着色器同步扭转、时间、剖切、透明度和指针输入，不可见层停止参与绘制。
-- **设计取舍。** 统一变形输入，避免不同表示在动画中错位。派生线和点的几何仍占用内存，不能声称所有图层只用一个几何对象。
-- **动手体验。** 依次切换五种状态，再调节 TWIST。这里的动图录制了真实浏览器控件操作。
+实体、线与点均由同一基础形体派生，着色器同步扭转、时间、剖切、透明度与指针参数，不可见图层停止绘制。派生线框和点云几何仍会占用额外内存，并非所有图层共用单一几何对象。动图记录了在真实浏览器中切换五种状态的操作；可以在实际页面调节 `TWIST`，继续观察形变。
 
 <a id="singularity"></a>
 
@@ -93,11 +81,9 @@
 
 [![07 / 奇点：弯曲的光与距离联动的声音](docs/readme/singularity.gif)](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
 
-环绕吸积盘、切换配色，或接近视觉上的视界。画面观察距离同时参与声音混音。
+绕行吸积盘、切换配色或靠近视界时，画面与声音混音都会随相机距离变化。
 
-- **实现思路。** 独立页面使用原生 WebGL 与自定义 GLSL。片元着色器沿近似弯曲的光线步进，累积吸积盘贡献并采样程序化星空，第二个 pass 重建高光并完成辉光与色调映射。
-- **声音设计。** Web Audio 随距离平滑调节增益和低通截止频率，将带署名的 NASA/Chandra 声化录音与合成氛围层混合。GIF 本身没有声音。
-- **能力边界。** 这是受黑洞影像启发的艺术近似，不是经过验证的广义相对论仿真。分辨率预算和帧耗时采样可在负载升高时降低画质。
+独立页面使用原生 WebGL 与自定义 GLSL：片元着色器沿近似弯曲的光线步进，累积吸积盘亮度并采样程序化星空，再经第二道 pass 重建高光、做辉光与色调映射。Web Audio 按距离平滑调整增益与低通截止频率，将带署名的 NASA/Chandra 声化录音与合成氛围声混合（GIF 无声）。这是受黑洞可视化启发的艺术近似，不是广义相对论科学仿真，高负载下分辨率预算与帧耗时采样会主动降低画质。
 
 <a id="gravity-off"></a>
 
@@ -105,11 +91,9 @@
 
 [![08 / GRAVITY OFF：有重量的文字](docs/readme/gravity-off.gif)](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
 
-释放字母、拖拽、改变重力，再把构图重新组装起来。文字的运动由碰撞形状和刚体状态参与控制。
+把字母释放到空间中拖拽、切换重力，再重新拼回构图。
 
-- **实现思路。** Three.js 绘制挤出的字形，Rapier 使用复合凸包碰撞体进行仿真。物理采用 1/60 秒固定步长，与显示帧分开累计，并限制单帧追赶步数。
-- **设计取舍。** 动态刚体处理释放与碰撞，运动学刚体负责按保存的初始姿态引导重组，区分自由运动与有意设计的归位。
-- **适用范围。** 物理引擎属于这个独立作品，主站桌面上的微缩展品没有重复运行完整仿真。
+Three.js 渲染挤出字形，Rapier 模拟复合凸包碰撞体，物理步长固定为 `1/60` 秒，与显示帧分开累计并限制单帧追赶步数。动态刚体负责释放与碰撞，运动学刚体则按保存的初始位姿引导重组。物理模拟属于该独立页面，主站桌面的微缩展品不会重复跑整套物理。
 
 <a id="xiaojian"></a>
 
@@ -117,30 +101,26 @@
 
 [![09 / 小间：有生命周期的微缩世界](docs/readme/xiaojian.gif)](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
 
-用几何、光照、天气与声音构建的小世界收藏室。走进场景、改变观察视角，再返回收藏目录。
+走进由几何、光照、天气与声音拼成的小世界，换个视角再回到收藏列表。
 
-- **实现思路。** React 外壳托管独立场景 iframe。带版本的消息协议在接受就绪、模式、拍照或释放消息前，检查来源、窗口与场景实例。
-- **设计取舍。** 切换经过加载、展开、就绪与收起阶段；缓存按设备分支限制为两个或三个场景条目，非活跃场景暂停，被淘汰的条目先收到释放请求。
-- **能力边界。** 缓存依然有资源成本。释放确认与超时处理用于管理生命周期，不代表内存占用为零。
+React 外壳通过带版本的消息协议与独立场景 iframe 通信，校验来源、发送窗口与场景实例后才接收 `ready`、模式、拍照或释放消息。切换流程经过加载、展开、就绪与收起阶段；缓存按设备分支保留两到三个条目，非活跃场景暂停，淘汰前先发释放请求。缓存仍有资源占用，释放确认与超时只是生命周期兜底，不代表内存归零。
 
 ## 在第一次交互前完成准备
 
 ![Preparation pipeline — architectural illustration](docs/readme/render-pipeline.svg)
 
-1. **把可分离的工作移出主线程。** Worker 读取、检查并解压环境数据，以 transferable ArrayBuffer 传回；纹理创建和 GPU 上传仍在主线程。
-2. **把昂贵准备拆成批次。** 代表性材质组合分批 `compileAsync`，再以小视口进行真实 draw priming；准备绘制会恢复可见性、目标、视口和裁剪状态。
-3. **用真实任务决定揭幕。** 模块、字体、场景、表面、着色器与预热分别报告进度；`ready → presented → entered` 区分准备、呈现与进入。
-4. **为失败留出继续路径。** 环境和材质请求等待 15 秒后可以回退，取消通过 AbortSignal 传播，暂停和后台状态参与准备时钟。
+1. **把可抽离的数据处理放进 Worker。** 环境 Worker 拉取、校验并解压烘焙环境数据，通过可转移 `ArrayBuffer` 回传；纹理创建与 GPU 上传仍在主线程完成。
+2. **分批编译与小视口预热。** 代表性材质变体分批调用 `compileAsync`，随后在 `32 × 32` 小视口执行真实绘制预热，并恢复可见性、render target、viewport 与 scissor 状态。
+3. **按真实任务进度决定揭幕。** 模块、字体、场景、表面资源、着色器与预热各自上报进度，按 `ready → presented → entered` 推进状态。
+4. **设置超时回退与取消边界。** 环境与材质请求等待 15 秒可走回退路径，取消通过 `AbortSignal` 传递，暂停与后台状态也会参与准备计时。
 
-这些设计分散或转移工作，不保证固定帧率或所有设备都无卡顿。
-
-[阅读实现拆解、简化代码与取舍 →](docs/ENGINEERING.zh-CN.md)
+这些做法用于拆分和前移工作，不承诺固定帧率或所有设备无卡顿。更多实现细节、简化代码与取舍见[工程笔记](docs/ENGINEERING.zh-CN.md)。
 
 ## 技术栈与适用位置
 
 | 组成 | 用在什么地方 |
 | --- | --- |
-| React · TypeScript · Vite | 页面、状态与构建 |
+| React · TypeScript · Vite | 页面组织、状态与构建 |
 | Three.js · 自定义 GLSL | 主站空间、Lab、失重文字及微缩场景 |
 | 原生 WebGL · GLSL | 奇点独立页面 |
 | GSAP · Lenis | 过渡、镜头与滚动协调 |
@@ -154,29 +134,21 @@
 git clone https://github.com/playertc5418-art/afterhours.git
 cd afterhours
 python -m http.server 8000
+
 ```
 
-打开 `http://localhost:8000/`。需要 Git、Python 和支持 WebGL 的浏览器；部分系统的 Python 命令为 `python3` 或 `py`。这是运行已发布静态网站，不是从 TypeScript 源码重新构建。
+在支持 WebGL 的浏览器中打开 `http://localhost:8000/`（部分环境需使用 `python3` 或 `py`）。这里启动的是已发布的静态文件，不包含 TypeScript 源码重构建流程。
 
 ## 分享方法，也欢迎改进
 
-欢迎报告交互问题、补充设备验证、改进文档或提出实验方案。讨论算法时尽量提供可复现步骤，把观察结果与推断分开；复用思路时保留作者与第三方素材出处。
-
-[贡献指南](CONTRIBUTING.zh-CN.md) · [Issues](https://github.com/playertc5418-art/afterhours/issues)
+欢迎提交问题复现、设备测试反馈、文档修正或实验想法。描述问题时附上可复现步骤，把观察结果与推测分开；借鉴或复用思路时请保留作者与第三方素材署名。详见[贡献指南](CONTRIBUTING.zh-CN.md)或前往 [Issues](https://github.com/playertc5418-art/afterhours/issues)。
 
 ## 来源与致谢
 
-本网站使用第三方库、改编组件、下载材质和带署名的声音素材。上面的技术拆解展示本网站的实现与集成，不表示所有底层算法和效果均为原创发明。
+网站集成了第三方库、改编组件、下载材质与带署名的音频；技术说明记录的是集成与实现方式，不代表所有算法或视觉效果都由本项目原创。完整清单见[来源与署名](docs/CREDITS.zh-CN.md)。
 
-[查看完整来源、使用位置、改动与许可 →](docs/CREDITS.zh-CN.md)
+当前仓库存放的是静态发布产物与说明文档，不是完整 TypeScript 开发工程，也未声明覆盖整站的开源许可证。工程笔记中的缩减代码用于说明原理而非替代源码；第三方素材各自沿用原有授权。
 
-<details>
-<summary><strong>发布范围、验证与署名</strong></summary>
+触屏布局、减少动态与 WebGL 回退均已实现。记录的验收覆盖 Windows Chromium 与手机尺寸模拟，不包括全部真机、Safari 版本或低端 GPU。智盾 SOC、HEMW 与 CodeEdu–Trace 为项目案例展示，其后端与模型不在 GitHub Pages 中运行。
 
-仓库当前包含静态发布文件与技术说明，尚未包含完整开发工程或统一的代码开源许可证。工程笔记中的缩减代码用于解释算法，不是完整源码替代品。第三方素材沿用各自许可；公开可见不代表全部内容可以不署名再分发。
-
-已实现触屏布局、减少动态与 WebGL 回退。记录的验收覆盖 Windows Chromium 与移动尺寸模拟，未声称覆盖真实手机、Safari 或低端 GPU。网站中的智盾 SOC、HEMW 与 CodeEdu–Trace 属于项目介绍，其后端和模型不在 GitHub Pages 中运行。
-
-Music: **Meanwhile** by Scott Buckley — [attribution and license](https://playertc5418-art.github.io/afterhours/audio/credits.html). Singularity: [NASA/Chandra sonification credits](https://playertc5418-art.github.io/afterhours/sites/blackhole/audio/credits.html). Font, material, and adapted-code notices remain in the distribution.
-
-</details>
+音频署名：Scott Buckley 的 **Meanwhile**（[署名与许可](https://playertc5418-art.github.io/afterhours/audio/credits.html)）与 NASA/Chandra 声化素材（[署名说明](https://playertc5418-art.github.io/afterhours/sites/blackhole/audio/credits.html)）。字体、材质与改编代码声明随发布文件一并保留。

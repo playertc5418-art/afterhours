@@ -9,11 +9,11 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a> · <a href="docs/CREDITS.md">Credits</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
-A portfolio you can move through, followed by the mechanics that make it work: spatial navigation, interactive shaders, GPU morphing, rendering preparation, and small worlds with explicit lifecycles.
+A spatial portfolio built around room navigation, interactive shaders, GPU morphing, phased preparation, and standalone mini-worlds with explicit lifecycles.
 
-All nine GIFs below are real browser captures, resized and sampled for reading rather than frame-rate measurement. The preparation diagram is an architectural illustration.
+The nine GIFs below come from real browser sessions, resized and frame-sampled for readability rather than frame-rate benchmarking. The preparation diagram is a schematic overview.
 
-**Explore the mechanics:** [Spatial navigation](#spatial-navigation) · [Renderer handoff](#shared-renderer) · [Flow fields](#fluid-typography) · [GPU particles](#particle-morphing) · [Image reveal](#image-reveal) · [Material states](#material-study) · [Singularity](#singularity) · [Gravity Off](#gravity-off) · [Xiaojian](#xiaojian)
+**Jump to:** [Spatial navigation](#spatial-navigation) · [Renderer handoff](#shared-renderer) · [Flow fields](#fluid-typography) · [GPU particles](#particle-morphing) · [Image reveal](#image-reveal) · [Material states](#material-study) · [Singularity](#singularity) · [Gravity Off](#gravity-off) · [Xiaojian](#xiaojian)
 
 <a id="spatial-navigation"></a>
 
@@ -21,11 +21,9 @@ All nine GIFs below are real browser captures, resized and sampled for reading r
 
 [![01 / Architecture as navigation](docs/readme/spatial-interaction.gif)](https://playertc5418-art.github.io/afterhours/)
 
-Click a room to inspect it; return to the building without losing your place. Rooms and objects provide spatial entry points into the portfolio rather than decorative scenery.
+Rooms and objects act as spatial entry points: click a room to inspect it, then return to the building overview without losing context.
 
-- **How it works.** Three.js raycast proxies follow the scene’s perspective. A state machine separates overview, entry, inspection, and handoff; camera movement, scroll ownership, and DOM focus change together.
-- **Why this approach.** A room can be inspected without immediately activating an object. Drag thresholds distinguish orbiting from clicking; Back and Escape provide a return path.
-- **Try it.** Open a room, move around, activate an available object, and return. The GIF shows room entry and return; chapter handoff is explained in the engineering notes.
+Three.js raycast proxies track scene perspective so hit regions match what you see on screen. A state machine separates `overview`, `entering`, `inspecting`, and `handoff`, keeping camera motion, scroll ownership, and DOM focus in sync. Drag thresholds separate orbiting from clicks, and both the back control and `Escape` exit inspection. Enter a room, look around, trigger an object, and head back; chapter handoff details live in the [engineering notes](docs/ENGINEERING.md).
 
 <a id="shared-renderer"></a>
 
@@ -33,11 +31,9 @@ Click a room to inspect it; return to the building without losing your place. Ro
 
 [![02 / One renderer, two experiences](docs/readme/opening.gif)](https://playertc5418-art.github.io/afterhours/)
 
-The road opening hands control to a nighttime workshop. The interesting part is the boundary between two rendering systems, not just the transition animation.
+The opening highway hands control over to the nighttime workshop, sharing one `WebGLRenderer` managed by `RenderHost`. Preparing the home scene before the reveal avoids creating a second host context, while restoring render target, viewport, scissor, color space, tone mapping, exposure, and shadow state keeps settings from one scene from leaking into the next.
 
-- **How it works.** A shared RenderHost owns the opening and home WebGLRenderer. The handoff restores render target, viewport, scissor, color space, tone mapping, exposure, and shadow settings before the home scene takes over.
-- **Why this approach.** Preparation can run before the reveal without creating a second host context. Shared state also requires explicit cleanup: a renderer setting left behind by one scene can break the next.
-- **Scope.** This applies to the opening and host site. Independent worlds have separate runtimes. The road and light trails are adapted from **[Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx) by David Haz / React Bits**, not authored entirely from scratch here. The pinned license is MIT + Commons Clause; [source, terms, and local changes](docs/CREDITS.md).
+This shared renderer applies to the opening and the host site; standalone pieces run their own runtimes. The opening road and light trails are adapted from **[Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx) by David Haz / React Bits** (pinned license: MIT + Commons Clause; see [source, terms, and local changes](docs/CREDITS.md)).
 
 <a id="fluid-typography"></a>
 
@@ -45,11 +41,9 @@ The road opening hands control to a nighttime workshop. The interesting part is 
 
 [![03 / Fluid typography](docs/readme/lab-fluid.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-Move the pointer through the text. Letterforms bend, split into color channels, and gradually settle as the injected force fades.
+Move the pointer across the letters to bend type, split RGB channels, and watch the injected force decay back to rest.
 
-- **How it works.** Two half-float render targets alternate between reading and writing. Semi-Lagrangian backtracing advects the previous field; a Gaussian pointer splat injects force. The display shader uses that field for UV displacement and RGB separation.
-- **Why this approach.** A 256 × 144 desktop field keeps the simulation grid independent of display resolution. The full-screen display pass still scales with the viewport; this is not a claim of constant total GPU cost.
-- **Boundary.** This is an interactive flow field, without a complete divergence/pressure/projection solver. Unsupported float targets use an analytical pointer ripple.
+Two half-float render targets ping-pong between read and write: semi-Lagrangian backtracing advects the previous velocity field while a Gaussian pointer splat adds local force, and the display pass samples the field to offset UVs and separate color channels. A `256 × 144` desktop simulation grid decouples field updates from display resolution, though the full-screen display pass still scales with viewport size. It is a simplified interactive flow field without a full divergence/pressure/projection solver, and falls back to an analytical pointer ripple when required float render targets are unavailable.
 
 <a id="particle-morphing"></a>
 
@@ -57,11 +51,9 @@ Move the pointer through the text. Letterforms bend, split into color channels, 
 
 [![04 / GPU particle morphing](docs/readme/lab-particles.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-One point cloud turns into CODE, FORM, and a sculpture. Moving the pointer pushes particles away; a click sends an expanding shockwave through the shape.
+Morph a point cloud between `CODE`, `FORM`, and a sculpture, push particles aside with the pointer, and send an expanding shockwave through the form on click.
 
-- **How it works.** Text sampling and sculpture geometry supply target positions. Buffer attributes store shape targets, scatter directions, and random seeds. The vertex shader combines staggered interpolation, pointer repulsion, and radial impulses.
-- **Why this approach.** The CPU updates uniforms rather than uploading every particle position each frame. The configured counts are 10,000 on desktop and 4,200 on the mobile branch; sampling and buffer creation still require preparation.
-- **Try it.** Switch targets, adjust DISPERSE, and trigger IMPULSE with a click or the keyboard.
+Canvas2D text sampling and sculpture geometry supply target positions stored in buffer attributes alongside scatter directions and per-particle seeds. The vertex shader handles staggered interpolation, pointer repulsion, and radial impulses while the CPU updates uniforms each frame rather than re-uploading every particle position. The configured counts are `10,000` on desktop and `4,200` on the mobile branch, with target sampling and buffer setup done during preparation. Switch targets, adjust `DISPERSE`, and trigger `IMPULSE` by clicking or pressing Space or Enter in the experiment panel.
 
 <a id="image-reveal"></a>
 
@@ -69,11 +61,9 @@ One point cloud turns into CODE, FORM, and a sculpture. Moving the pointer pushe
 
 [![05 / From signal to image](docs/readme/lab-reveal.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-A picture emerges through noise, grid, and halftone stages. A local lens bends the revealed image beneath the pointer.
+Bring an image up through noise, grid, and halftone stages, and inspect it through a local pointer lens.
 
-- **How it works.** Image luminance controls dot size inside a grid. A scan front blends the signal stages into the original image; pointer distance controls UV refraction and chromatic separation.
-- **Why this approach.** One image drives both the halftone representation and the final reveal. Aspect-aware cover sampling keeps the image framed as the panel changes shape.
-- **Boundary.** The lens is a screen-space shader effect, not a physically traced glass object. Drag REVEAL to inspect the transition instead of waiting for a preset animation.
+Luminance sets dot radius inside a grid, a scan front blends signal stages toward the source photo, and pointer distance drives UV refraction and chromatic separation. One image drives both halftone sizing and the final reveal, using aspect-aware cover sampling as the panel resizes. The lens is a screen-space shader effect rather than a ray-traced glass object; drag `REVEAL` to scrub the transition directly.
 
 <a id="material-study"></a>
 
@@ -81,11 +71,9 @@ A picture emerges through noise, grid, and halftone stages. A local lens bends t
 
 [![06 / One form, five material states](docs/readme/lab-material.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
-Move between solid, wire, sliced, point, and X-ray views. The form remains recognizable while its surface, structure, and interior are exposed differently.
+Switch between solid, wire, sliced, point, and X-ray views while keeping the underlying form legible across surface, structural, and interior reads.
 
-- **How it works.** Solid, line, and point representations derive from a shared base form. Their shaders coordinate twist, time, clipping, opacity, and pointer input; invisible layers stop drawing.
-- **Why this approach.** Keeping deformation inputs aligned prevents the representations from drifting apart. Derived line and point geometry still consumes memory: this is not literally one geometry object for all layers.
-- **Try it.** Switch all five states and adjust TWIST. The animation records those controls in the real browser.
+Solid, line, and point representations derive from a shared base form and receive aligned twist, time, clipping, opacity, and pointer inputs so layers stay in sync; hidden layers stop drawing. Derived line and point geometry still uses extra memory—layers do not all share a single geometry object. The GIF records switching between the five states. Adjust `TWIST` in the live experiment to explore deformation.
 
 <a id="singularity"></a>
 
@@ -93,11 +81,9 @@ Move between solid, wire, sliced, point, and X-ray views. The form remains recog
 
 [![07 / SINGULARITY — bending light and shaping sound](docs/readme/singularity.gif)](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
 
-Orbit a luminous accretion disk, change the palette, or approach the apparent horizon. The visual system and sound mix respond to the same camera distance.
+Orbit a glowing accretion disk, switch palettes, or move toward the apparent horizon as visuals and audio respond to camera distance.
 
-- **How it works.** The standalone app uses native WebGL and custom GLSL. A fragment shader steps an approximately curved ray, accumulates accretion-disk contributions, and samples a procedural sky. A second pass reconstructs highlights for bloom and tone mapping.
-- **Sound.** Web Audio smoothly changes gain and low-pass cutoff with distance. An attributed NASA/Chandra sonification recording is mixed with a synthesized ambience; GIF previews are silent.
-- **Boundary.** This is an artistic approximation inspired by black-hole imagery, not a validated general-relativity simulation. Resolution budgets and frame-time sampling can reduce rendering quality under load.
+Built with native WebGL and custom GLSL, the fragment shader steps an approximately curved ray, accumulates accretion-disk light, and samples a procedural sky, followed by a second pass that reconstructs highlights for bloom and tone mapping. Web Audio smoothly updates gain and low-pass cutoff with distance, mixing an attributed NASA/Chandra sonification recording with synthesized ambience (GIF previews are silent). This is an artistic approximation inspired by black-hole imagery rather than a validated general-relativity simulation, and frame-time / resolution budgets can scale down quality under load.
 
 <a id="gravity-off"></a>
 
@@ -105,11 +91,9 @@ Orbit a luminous accretion disk, change the palette, or approach the apparent ho
 
 [![08 / GRAVITY OFF — typography with a body](docs/readme/gravity-off.gif)](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
 
-Release the letters, drag them through space, change gravity, and assemble the composition again. The moving type has collision shapes and rigid-body state.
+Drop letters into space, drag them around, change gravity, and reassemble the layout.
 
-- **How it works.** Three.js renders extruded glyphs; Rapier simulates compound convex-hull colliders. A 1/60-second physics step is accumulated separately from display frames, with a cap on catch-up steps.
-- **Why this approach.** Dynamic bodies handle release and collision. Kinematic bodies guide reassembly back to stored home poses, separating free motion from an intentional return.
-- **Boundary.** Physics belongs to this standalone experience. The miniature visible on the main-site desk does not run a second copy of the full simulation.
+Extruded glyphs render in Three.js while Rapier simulates compound convex-hull colliders on a `1/60`-second fixed step accumulated separately from display frames with a catch-up step cap. Dynamic bodies drive free motion and collisions, whereas kinematic bodies guide reassembly back to stored home poses. Physics runs in this standalone experience; the miniature on the main-site desk does not duplicate the full simulation.
 
 <a id="xiaojian"></a>
 
@@ -117,24 +101,20 @@ Release the letters, drag them through space, change gravity, and assemble the c
 
 [![09 / XIAOJIAN — miniature worlds with a lifecycle](docs/readme/xiaojian.gif)](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
 
-A collection of small worlds built from geometry, lighting, weather, and sound. Enter a scene, change the view, then return to the collection.
+Step into small worlds built from geometry, lighting, weather, and sound, adjust the view, and return to the collection.
 
-- **How it works.** A React shell hosts independent scene frames. A versioned message protocol checks origin, source window, and scene instance before accepting readiness, mode, capture, or disposal messages.
-- **Why this approach.** Scene switching coordinates loading, opening, ready, and closing phases. A bounded cache keeps two or three scene entries according to the device branch; inactive scenes are paused, and retired entries receive a disposal request.
-- **Boundary.** Cached scenes still have resource costs. Disposal acknowledgement and timeout handling are lifecycle safeguards, not a promise of zero memory use.
+A React shell hosts isolated scene frames over a versioned message protocol that checks origin, sender window, and scene instance before accepting `ready`, mode, capture, or disposal messages. Scene transitions coordinate loading, opening, ready, and closing phases, while a bounded cache keeps two or three scene entries depending on the device branch, pauses inactive scenes, and sends a disposal request before retiring entries. Caching still carries memory cost, and disposal acknowledgements and timeouts are lifecycle guardrails rather than a guarantee of zero memory overhead.
 
 ## Prepare before the first interaction
 
 ![Preparation pipeline — architectural illustration](docs/readme/render-pipeline.svg)
 
-1. **Move separable work off the main thread.** A Worker fetches, validates, and decompresses environment data, then transfers ArrayBuffers back. Texture creation and GPU upload remain on the main thread.
-2. **Prepare in batches.** Representative material variants call `compileAsync` incrementally, followed by real small-viewport draw priming. Preparation restores visibility, targets, viewports, and scissor state.
-3. **Gate presentation on actual tasks.** Modules, fonts, scene, surfaces, shaders, and warm-up report progress; `ready → presented → entered` distinguishes preparation from presentation and entry.
-4. **Keep a way forward.** Environment and material requests can fall back after 15 seconds; AbortSignal carries cancellation, while pause and background state participate in preparation timing.
+1. **Offload separable work to a Worker.** The environment Worker fetches, validates, and decompresses baked environment data, returning `ArrayBuffer`s via transfer while texture creation and GPU upload stay on the main thread.
+2. **Batch compilation and priming.** Representative material variants run `compileAsync` in batches, followed by small-viewport draw priming that restores visibility, render targets, viewports, and scissor state.
+3. **Gate presentation on actual tasks.** Modules, fonts, scene construction, surfaces, shaders, and warm-up report progress across `ready → presented → entered`.
+4. **Bound waiting and cancellation.** Environment and material requests can fall back after 15 seconds, `AbortSignal` propagates cancellation, and pause/background states factor into preparation timing.
 
-These choices distribute or relocate work. They do not guarantee a fixed frame rate or a stutter-free result on every device.
-
-[Read the implementation walkthrough, reduced examples, and trade-offs →](docs/ENGINEERING.md)
+These steps distribute work rather than guaranteeing a fixed frame rate or stutter-free playback on every device. See the [engineering notes](docs/ENGINEERING.md) for walkthroughs, reduced snippets, and trade-offs.
 
 ## Stack, with boundaries
 
@@ -154,29 +134,21 @@ These choices distribute or relocate work. They do not guarantee a fixed frame r
 git clone https://github.com/playertc5418-art/afterhours.git
 cd afterhours
 python -m http.server 8000
+
 ```
 
-Open `http://localhost:8000/`. Requires Git, Python, and a WebGL-capable browser; your Python command may be `python3` or `py`. This serves the published static website; it does not rebuild the TypeScript project.
+Open `http://localhost:8000/` in a WebGL-capable browser (`python3` or `py` may be required depending on your setup). This serves the static distribution; it does not rebuild a TypeScript source tree.
 
 ## Share the method. Improve the work.
 
-Bug reports, device checks, documentation improvements, and experiment proposals are welcome. Describe reproducible steps, distinguish observations from assumptions, and preserve attribution when building on a technique.
-
-[Contribution guide](CONTRIBUTING.md) · [Issues](https://github.com/playertc5418-art/afterhours/issues)
+Bug reports, device checks, documentation fixes, and experiment ideas are welcome. Share reproducible steps, separate observations from assumptions, and keep attribution intact when building on existing pieces. See [Contributing](CONTRIBUTING.md) or open an [Issue](https://github.com/playertc5418-art/afterhours/issues).
 
 ## Sources & acknowledgements
 
-This website uses third-party libraries, an adapted component, downloaded materials, and credited audio. The walkthrough documents this website’s implementation and integration; it does not claim original invention of every underlying algorithm or effect.
+This site integrates third-party libraries, an adapted component, downloaded materials, and credited audio; walkthroughs document how they are wired together here rather than claiming original invention of every algorithm or effect. Full details live in [Credits](docs/CREDITS.md).
 
-[See upstream work, use, changes, and license notices →](docs/CREDITS.md)
+This repository holds static build output and documentation—not the full TypeScript development project or a site-wide open-source license. Reduced snippets in the engineering notes clarify mechanics rather than replacing source code, and third-party assets remain governed by their own terms.
 
-<details>
-<summary><strong>Distribution, validation, and credits</strong></summary>
+Touch layouts, reduced motion, and WebGL fallbacks are implemented. Recorded checks cover Windows Chromium and mobile-size emulation, not every physical phone, Safari version, or low-end GPU. 智盾 SOC, HEMW, and CodeEdu–Trace appear as project stories; their backends and models do not run inside GitHub Pages.
 
-This repository currently contains static output and technical documentation, rather than the complete development project or a blanket open-source code license. Reduced examples in the notes explain algorithms; they are not a replacement for the full source. Third-party assets retain their own terms; public visibility does not grant unrestricted reuse of every asset.
-
-Touch layouts, reduced motion, and WebGL fallback paths are implemented. Recorded acceptance covers Windows Chromium and mobile-size emulation, not every physical phone, Safari version, or low-end GPU. 智盾 SOC, HEMW, and CodeEdu–Trace are project stories; their backends and models do not execute inside GitHub Pages.
-
-Music: **Meanwhile** by Scott Buckley — [attribution and license](https://playertc5418-art.github.io/afterhours/audio/credits.html). Singularity: [NASA/Chandra sonification credits](https://playertc5418-art.github.io/afterhours/sites/blackhole/audio/credits.html). Font, material, and adapted-code notices remain in the distribution.
-
-</details>
+Audio credits: **Meanwhile** by Scott Buckley ([attribution and license](https://playertc5418-art.github.io/afterhours/audio/credits.html)) and NASA/Chandra sonification ([credits](https://playertc5418-art.github.io/afterhours/sites/blackhole/audio/credits.html)). Font, material, and adapted-code notices are included in the distribution.
