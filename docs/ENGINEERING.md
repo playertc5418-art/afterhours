@@ -72,7 +72,7 @@ These choices move and distribute work. Network conditions, drivers, shader cach
 
 ## Standalone experiences
 
-- **Singularity:** Three.js imagery and camera control with distance-responsive Web Audio.
+- **Singularity:** native WebGL and custom GLSL imagery, camera control, and distance-responsive Web Audio.
 - **Gravity Off:** Three.js rendering and Rapier simulation for release, drag, gravity changes, pause, and reassembly.
 - **Xiaojian:** miniature worlds combining geometry, materials, lighting, weather, and sound.
 
@@ -80,8 +80,124 @@ Their host-site miniatures are navigation objects. The main page does not run al
 
 ## Scope
 
-The repository distributes static output, rather than the complete development project. Internal module names explain the implementation; they are not links to public source files in this repository.
+The repository distributes static output, rather than the complete development project. Internal module names explain the implementation. The shipped-file reading guide below links to public distribution files, not the full authoring tree.
 
 Recorded checks cover Windows Chromium and mobile-size emulation. Physical phones, Safari, and low-end GPUs need separate acceptance. This document adds no new benchmark claims.
 
 [Back to README](../README.md)
+
+
+## Build the idea in smaller pieces
+
+The examples below deliberately remove application plumbing. They explain the shipped algorithms; they are **not drop-in files or a complete runnable source project**. Start with one pass or interaction, inspect its inputs, then add the surrounding lifecycle.
+
+### 1. Understand the ping-pong boundary
+
+Read and write different textures during a simulation step. Sampling from the same texture currently attached for rendering would create a feedback problem. A reduced sketch of the field update is:
+
+```js
+uniforms.uPrev.value = read.texture;
+renderer.setRenderTarget(write);
+renderer.render(fieldScene, fieldCamera);
+renderer.setRenderTarget(null);
+[read, write] = [write, read];
+```
+
+The field shader backtraces through the previous velocity, then adds a pointer splat and decay. The display shader samples the resulting field. Learn the two passes separately: first visualize velocity as color, then use it to perturb text UVs. A useful experiment is to change dissipation while holding pointer force constant.
+
+### 2. Separate particle targets from animation state
+
+The actual shader delays each particle using its stored seed:
+
+```glsl
+float local = smoothstep(aSeed * 0.45,
+                         aSeed * 0.45 + 0.55, uMix);
+vec3 p = mix(shape(uFrom), shape(uTo), local);
+p += aScatter * sin(local * 3.14159) * 0.55 * motion;
+```
+
+Targets remain in vertex attributes while uniforms describe the current transition. Repulsion and the radial impulse are additional position offsets. To study the effect, disable scatter first: the plain interpolation makes the correspondence and resampling limitations easier to see.
+
+### 3. Treat reveal, lens, and framing as separate controls
+
+The reveal uses image luminance to size dots, then a scan mask to blend stages. Lens refraction changes the lookup UV near the pointer; it does not alter the original image. Aspect-aware cover sampling is a separate step.
+
+Test with a flat gray image before a detailed photograph: that exposes the dot grid and scan mask. Then enable the lens at a fixed reveal value. Keeping the controls independent helps distinguish a framing error from a shader effect.
+
+### 4. Deform every representation consistently
+
+The material study derives surfaces, lines, and points from the same base form. Apply corresponding twist and clip inputs to every visible representation. Otherwise the solid may move while the wire view remains in its original pose.
+
+Watch visibility as well as opacity. Hiding a completed layer prevents an unnecessary draw; setting its opacity to zero alone does not express that scheduling decision.
+
+### 5. Transfer environment data, then upload on the main thread
+
+The environment Worker transfers the decoded buffers:
+
+```js
+self.postMessage({ maps }, {
+  transfer: maps.map(map => map.data)
+});
+```
+
+Ownership moves rather than leaving a reusable copy in the Worker. The receiver still constructs textures and performs GPU uploads. Header, dimensions, byte length, gzip detection, cancellation, and timeout handling are part of the implementation—not optional details hidden by this small example.
+
+### 6. Compile programs, then exercise a real draw
+
+`compileAsync` prepares shader programs, while the first real draw can still require buffer upload, texture upload, shadow preparation, or driver work. The implementation groups representative variants in batches of eight, then primes small-area draws in batches of up to four objects.
+
+These are scheduling choices rather than measured performance guarantees. Check actual entry-frame behavior after a cold load, a failed request, and a return transition. Restore viewport, scissor, target, visibility, and culling after preparation.
+
+### 7. Keep physics time separate from display time
+
+Gravity Off accumulates elapsed time, runs fixed simulation steps, and caps catch-up work. A reduced sketch is:
+
+```js
+accumulator += elapsed;
+let steps = 0;
+while (accumulator >= 1 / 60 && steps < 4) {
+  simulation.step();
+  accumulator -= 1 / 60;
+  steps++;
+}
+```
+
+The application adds pause and interaction states around that loop. A fixed step is not the same as rendering at 60 fps. Reassembly changes bodies to kinematic motion so a designed return does not fight free-body collisions.
+
+### 8. Drive distance-responsive sound smoothly
+
+Singularity maps inverse camera distance into a smoothed proximity value. It uses that value to target gain and low-pass frequency, with `setTargetAtTime` smoothing the change. Updating an AudioParam target smoothly avoids treating each display frame as an abrupt volume switch.
+
+The visual preview cannot demonstrate sound quality. Open the actual page, enable audio through a user gesture, and compare far and near positions. Keep the recording's attribution separate from the synthesized ambience.
+
+### 9. Give every small world an identity and an exit
+
+Xiaojian checks the message origin, sender window, protocol version, and scene instance. A late ready or photo message from a previous world must not change the current world. Disposal sends a request, waits for acknowledgement or a bounded timeout, and then retires the frame.
+
+Reproduce a lifecycle issue by switching scenes rapidly, returning to a cached scene, opening a dialog, and hiding the browser tab. Check what continues rendering or playing sound, rather than assuming a hidden iframe is inactive.
+
+## Read the actual shipped implementation
+
+The public files below are the current distribution, not the complete TypeScript authoring tree. Host bundles are deliberately labeled as bundles. Search function names inside them when following the walkthrough.
+
+| Topic | Published file / entry point |
+| --- | --- |
+| Flow, particles, material study | [Host graphics bundle](../assets/World-C9Mo80hw.js): `createFlow`, `particleTextSteps`, `createArtifact` |
+| Opening state and shared renderer | [Host entry bundle](../assets/index-Cu9ZWOIE.js): `RenderHost`, `Opening` |
+| Environment decompression | [Worker distribution](../assets/environment.worker-CH5BMuaY.js) |
+| Black-hole ray integration and post pass | [Singularity GLSL](../sites/blackhole/app/shaders.mjs) |
+| Distance-to-sound mapping | [Singularity audio](../sites/blackhole/app/audio.mjs): `intensity`, `applyMix` |
+| Render budget and context restoration | [Singularity renderer](../sites/blackhole/app/renderer.mjs) |
+| Rigid bodies and reassembly | [Gravity Off bundle](../sites/gravity-off/app.js): simulation and fixed-step loop |
+
+## Further reading
+
+- [Three.js Raycaster](https://threejs.org/docs/pages/Raycaster.html): picking rays and intersection results.
+- [Three.js BufferGeometry](https://threejs.org/docs/pages/BufferGeometry.html): per-vertex data and attributes.
+- [Three.js WebGLRenderer](https://threejs.org/docs/pages/WebGLRenderer.html): rendering, targets, and compilation APIs.
+- [Transferable objects — MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects): ownership transfer and detached buffers.
+- [Rapier rigid bodies](https://rapier.rs/docs/user_guides/javascript/rigid_bodies/): dynamic and kinematic bodies.
+
+These links explain the underlying APIs. The project-specific behavior and limitations described above come from the implementation, rather than implying endorsement by those projects.
+
+[Contribute a reproduction or improvement](../CONTRIBUTING.md) · [Back to README](../README.md)

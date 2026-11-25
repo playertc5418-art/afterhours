@@ -112,7 +112,7 @@ entered：进入主站体验
 
 | 作品 | 实现重点 |
 | --- | --- |
-| 奇点 | Three.js 场景与镜头，Web Audio 声景，距离对声音强度和音色的联动 |
+| 奇点 | 原生 WebGL 与自定义 GLSL，Web Audio 声景，距离对声音强度和音色的联动 |
 | GRAVITY OFF | Three.js 渲染与 Rapier 物理，释放、拖动、重力切换、暂停与重组 |
 | 小间 | 微缩场景的尺度、材质、灯光、天气与声音编排 |
 
@@ -138,3 +138,119 @@ entered：进入主站体验
 既有发布检查覆盖 Windows Chromium 桌面、手机尺寸模拟、主要入口和案例详情。真实手机、Safari 与低端 GPU 需要独立验收；不同版本的历史记录不能当作当前版本全部重新通过。
 
 [返回 README](../README.zh-CN.md)
+
+
+## 把效果拆开，逐步理解
+
+下面的缩减代码有意省略应用结构，用于解释已发布的算法，**不是可直接替换的文件或完整可运行源码工程**。先理解一个 pass 或一个交互的输入输出，再补上外围生命周期。
+
+### 1. 先理解双缓冲的边界
+
+一次模拟中读取和写入不同的纹理，避免一边把纹理作为渲染目标，一边又采样它造成反馈问题。缩减流程为：
+
+```js
+uniforms.uPrev.value = read.texture;
+renderer.setRenderTarget(write);
+renderer.render(fieldScene, fieldCamera);
+renderer.setRenderTarget(null);
+[read, write] = [write, read];
+```
+
+场着色器先沿上一帧速度回溯，再叠加指针注入和衰减；显示着色器采样最终流场。学习时可以先把速度显示为颜色，再用它扰动文字 UV；固定指针力度，观察改变耗散率的影响。
+
+### 2. 把粒子目标与动画状态分开
+
+实际着色器用保存的随机种子错开各粒子的变形时间：
+
+```glsl
+float local = smoothstep(aSeed * 0.45,
+                         aSeed * 0.45 + 0.55, uMix);
+vec3 p = mix(shape(uFrom), shape(uTo), local);
+p += aScatter * sin(local * 3.14159) * 0.55 * motion;
+```
+
+目标点留在顶点属性中，uniform 描述当前过渡，指针排斥和径向冲量继续叠加位置偏移。先关闭散射，可以更清楚地观察目标对应关系与重采样的局限。
+
+### 3. 分别检查显影、透镜与构图
+
+显影先用亮度控制圆点大小，再用扫描遮罩混合阶段；透镜改变指针附近的采样 UV，不修改原图。按宽高比计算的 cover 采样又是独立步骤。
+
+先用纯灰图检查点阵和扫描遮罩，再在固定显影进度下启用透镜。把控制分开，才能分辨问题来自构图还是着色效果。
+
+### 4. 每种表示都应使用一致的变形
+
+材质实验从同一基础形体派生实体、线与点，对可见表示应用对应的扭转和剖切输入，避免实体已经运动而线框还停在原位。
+
+同时检查可见性与透明度：隐藏已经退出的图层，可以避免无意义绘制；仅把透明度降为零，不等于完成了绘制调度。
+
+### 5. 转移环境数据，再在主线程上传
+
+环境 Worker 将解码后的缓冲区转移回来：
+
+```js
+self.postMessage({ maps }, {
+  transfer: maps.map(map => map.data)
+});
+```
+
+转移后 Worker 不再持有一份可继续使用的原缓冲区。接收侧仍需创建纹理并上传 GPU。文件头、尺寸、字节数、gzip 检测、取消与超时都属于完整实现，不能被这个小示例掩盖。
+
+### 6. 编译之后，还要让真实绘制走过一次
+
+`compileAsync` 准备着色器程序，第一次真正 draw 仍可能遇到缓冲上传、纹理上传、阴影准备或驱动工作。实现按每批八个代表对象编译，再以最多四个对象一批进行小面积绘制预热。
+
+这属于调度策略，不是性能保证。要检查冷加载、请求失败与返回过渡后的真实进入帧，并在准备后恢复视口、裁剪区、目标、可见性和剔除状态。
+
+### 7. 把物理时间与显示时间分开
+
+失重作品累计经过时间，按固定步长更新仿真，并限制追赶工作。缩减流程为：
+
+```js
+accumulator += elapsed;
+let steps = 0;
+while (accumulator >= 1 / 60 && steps < 4) {
+  simulation.step();
+  accumulator -= 1 / 60;
+  steps++;
+}
+```
+
+应用外围还有暂停和交互状态。固定步长不等于画面实测 60 fps；重组时切换为运动学控制，避免设计好的归位运动与自由碰撞互相对抗。
+
+### 8. 平滑驱动距离联动声音
+
+奇点将相机距离的倒数映射为平滑接近程度，再据此设置增益和低通频率目标，使用 `setTargetAtTime` 平滑变化，避免每帧把音量当作开关硬切。
+
+动图不能证明声音质量。需要打开页面，经用户操作启用音频，再比较远近位置的声音。录音素材的署名与程序合成的氛围层也应分开说明。
+
+### 9. 为每个世界保留身份和退出路径
+
+小间检查消息来源、发送窗口、协议版本与场景实例，防止上一个场景迟到的就绪或拍照消息改变当前场景。淘汰时先请求释放，等待确认或有限超时后再移除 frame。
+
+可以通过快速切换、返回缓存场景、打开弹层和隐藏标签页复现场景生命周期问题。检查实际是否仍在绘制或播放声音，不能假定隐藏 iframe 就已经停止。
+
+## 阅读已发布的真实实现
+
+以下是当前发行文件，不是完整 TypeScript 开发目录。主站文件明确标为 bundle，可搜索函数名对照上面的说明。
+
+| 主题 | 已发布文件与入口 |
+| --- | --- |
+| 流场、粒子、材质实验 | [主站图形 bundle](../assets/World-C9Mo80hw.js)：`createFlow`、`particleTextSteps`、`createArtifact` |
+| 开场状态与共享渲染器 | [主站入口 bundle](../assets/index-Cu9ZWOIE.js)：`RenderHost`、`Opening` |
+| 环境解压 | [Worker 发行文件](../assets/environment.worker-CH5BMuaY.js) |
+| 黑洞光线步进与后处理 | [奇点 GLSL](../sites/blackhole/app/shaders.mjs) |
+| 距离到声音的映射 | [奇点音频](../sites/blackhole/app/audio.mjs)：`intensity`、`applyMix` |
+| 分辨率预算与上下文恢复 | [奇点渲染器](../sites/blackhole/app/renderer.mjs) |
+| 刚体与重组 | [失重作品 bundle](../sites/gravity-off/app.js)：仿真和固定步长循环 |
+
+## 继续学习
+
+- [Three.js Raycaster](https://threejs.org/docs/pages/Raycaster.html)：命中射线与交点。
+- [Three.js BufferGeometry](https://threejs.org/docs/pages/BufferGeometry.html)：逐顶点数据与属性。
+- [Three.js WebGLRenderer](https://threejs.org/docs/pages/WebGLRenderer.html)：绘制、渲染目标和编译 API。
+- [MDN：可转移对象](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects)：所有权转移与分离后的缓冲区。
+- [Rapier 刚体](https://rapier.rs/docs/user_guides/javascript/rigid_bodies/)：动态和运动学刚体。
+
+这些资料解释基础 API；上面的项目行为与边界来自实际实现，不代表获得这些项目背书。
+
+[贡献复现报告或改进](../CONTRIBUTING.zh-CN.md) · [返回 README](../README.zh-CN.md)
