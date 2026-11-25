@@ -7,7 +7,7 @@
 
 <p align="center"><strong>Ideas take shape after dark.</strong><br />A nighttime workshop for spatial interfaces and real-time graphics.</p>
 
-<p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a> · <a href="docs/CREDITS.md">Credits</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
 A portfolio you can move through, followed by the mechanics that make it work: spatial navigation, interactive shaders, GPU morphing, rendering preparation, and small worlds with explicit lifecycles.
 
@@ -37,7 +37,7 @@ The road opening hands control to a nighttime workshop. The interesting part is 
 
 - **How it works.** A shared RenderHost owns the opening and home WebGLRenderer. The handoff restores render target, viewport, scissor, color space, tone mapping, exposure, and shadow settings before the home scene takes over.
 - **Why this approach.** Preparation can run before the reveal without creating a second host context. Shared state also requires explicit cleanup: a renderer setting left behind by one scene can break the next.
-- **Scope.** This applies to the opening and host site. Independent worlds have separate runtimes. The opening is adapted from React Bits Hyperspeed; provenance and licenses remain with the distribution.
+- **Scope.** This applies to the opening and host site. Independent worlds have separate runtimes. The road and light trails are adapted from **[Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx) by David Haz / React Bits**, not authored entirely from scratch here. The pinned license is MIT + Commons Clause; [source, terms, and local changes](docs/CREDITS.md).
 
 <a id="fluid-typography"></a>
 
@@ -163,6 +163,12 @@ Open `http://localhost:8000/`. Requires Git, Python, and a WebGL-capable browser
 Bug reports, device checks, documentation improvements, and experiment proposals are welcome. Describe reproducible steps, distinguish observations from assumptions, and preserve attribution when building on a technique.
 
 [Contribution guide](CONTRIBUTING.md) · [Issues](https://github.com/playertc5418-art/afterhours/issues)
+
+## Sources & acknowledgements
+
+This website uses third-party libraries, an adapted component, downloaded materials, and credited audio. The walkthrough documents this website’s implementation and integration; it does not claim original invention of every underlying algorithm or effect.
+
+[See upstream work, use, changes, and license notices →](docs/CREDITS.md)
 
 <details>
 <summary><strong>Distribution, validation, and credits</strong></summary>

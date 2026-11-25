@@ -1,5 +1,7 @@
 # AFTERHOURS · 工程笔记
 
+第三方库、直接改编组件与素材来源，见[来源与署名](CREDITS.zh-CN.md)。其中开场道路基于 David Haz / React Bits 的 Hyperspeed 改编；本文讲解项目集成，不宣称所有底层技术均为原创。
+
 [English](ENGINEERING.md) · **简体中文**
 
 [返回 README](../README.zh-CN.md) · [在线体验](https://playertc5418-art.github.io/afterhours/)

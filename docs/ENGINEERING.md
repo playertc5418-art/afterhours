@@ -1,5 +1,7 @@
 # AFTERHOURS · Engineering notes
 
+For software dependencies, directly adapted work, and assets, see [Third-party work & attribution](CREDITS.md). The opening road is adapted from David Haz / React Bits Hyperspeed; this document explains project integration without claiming invention of every underlying technique.
+
 **English** · [简体中文](ENGINEERING.zh-CN.md)
 
 [Back to README](../README.md) · [Explore the website](https://playertc5418-art.github.io/afterhours/)

@@ -7,7 +7,7 @@
 
 <p align="center"><strong>Ideas take shape after dark.</strong><br />入夜，让想法成形。</p>
 
-<p align="center"><a href="https://playertc5418-art.github.io/afterhours/">进入网站 ↗</a> · <a href="docs/ENGINEERING.zh-CN.md">工程笔记</a> · <a href="CONTRIBUTING.zh-CN.md">参与贡献</a></p>
+<p align="center"><a href="https://playertc5418-art.github.io/afterhours/">进入网站 ↗</a> · <a href="docs/ENGINEERING.zh-CN.md">工程笔记</a> · <a href="docs/CREDITS.zh-CN.md">来源与署名</a> · <a href="CONTRIBUTING.zh-CN.md">参与贡献</a></p>
 
 这里不只展示结果，也分享结果怎样产生：空间如何成为导航，文字如何被流场搅动，粒子怎样在 GPU 上变形，以及场景如何准备、接力与释放。
 
@@ -37,7 +37,7 @@
 
 - **实现思路。** RenderHost 管理开场与首页共用的 WebGLRenderer。接力时恢复渲染目标、视口、裁剪区、色彩空间、色调映射、曝光与阴影设置，再由首页接管画布。
 - **设计取舍。** 在揭幕前准备首页，无需为主站另建一份渲染上下文；代价是必须明确恢复渲染状态，避免上一场景遗留设置影响下一场景。
-- **适用范围。** 共享范围仅为开场与主站，独立作品各自管理运行时。开场基于 React Bits Hyperspeed 改编，发行文件保留来源与许可证。
+- **适用范围。** 共享范围仅为开场与主站，独立作品各自管理运行时。开场道路和光轨改编自 **David Haz / React Bits 的 [Hyperspeed](https://github.com/DavidHDev/react-bits/blob/e12c22192ac7b4b452c5e2feb9b586d74765d696/src/content/Backgrounds/Hyperspeed/Hyperspeed.jsx)**，不是本网站从零原创。所用版本为 MIT + Commons Clause；[来源、许可与本地改动](docs/CREDITS.zh-CN.md)。
 
 <a id="fluid-typography"></a>
 
@@ -163,6 +163,12 @@ python -m http.server 8000
 欢迎报告交互问题、补充设备验证、改进文档或提出实验方案。讨论算法时尽量提供可复现步骤，把观察结果与推断分开；复用思路时保留作者与第三方素材出处。
 
 [贡献指南](CONTRIBUTING.zh-CN.md) · [Issues](https://github.com/playertc5418-art/afterhours/issues)
+
+## 来源与致谢
+
+本网站使用第三方库、改编组件、下载材质和带署名的声音素材。上面的技术拆解展示本网站的实现与集成，不表示所有底层算法和效果均为原创发明。
+
+[查看完整来源、使用位置、改动与许可 →](docs/CREDITS.zh-CN.md)
 
 <details>
 <summary><strong>发布范围、验证与署名</strong></summary>
