@@ -16,6 +16,6 @@
 <path id="m" d="M320 467H425M675 467H780M905 510V550" class="wire"/>
 <rect x="48" y="550" width="1004" height="76" fill="#0b1013"/>
 <text x="75" y="596" style="fill:#c5f467;font-size:29px">ready → presented → entered</text><text x="684" y="596" style="fill:#efeee7;font-size:22px">ONE SHARED RENDERER</text>
-<circle r="6" class="signal"><animateMotion dur="3s" repeatCount="indefinite" path="M70 247H1030"/></circle><circle r="6" class="signal"><animateMotion dur="4s" repeatCount="indefinite" path="M905 283V344H195V424"/></circle><circle r="6" class="signal"><animateMotion dur="5s" repeatCount="indefinite" path="M70 467H1030"/></circle>
+<circle r="6" class="signal"><animateMotion dur="3s" repeatCount="indefinite" path="M320 247H425"/></circle><circle r="6" class="signal"><animateMotion dur="4s" repeatCount="indefinite" path="M905 283V344H195V424"/></circle><circle r="6" class="signal"><animateMotion dur="5s" repeatCount="indefinite" path="M675 467H780"/></circle>
 <text x="48" y="671" class="small">ARCHITECTURAL SCHEMATIC / SIGNAL MOTION DOES NOT REPRESENT MEASURED TIMING</text>
 </svg>
