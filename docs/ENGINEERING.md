@@ -210,4 +210,4 @@ The README field arrows and state nodes are explanatory schematics, not GPU-fiel
 
 [![Preparation and thread ownership schematic](readme/preparation-v2-preview.webp)](readme/preparation-v2.svg)
 
-The README uses static WebP previews by default, retaining links to every full GIF and live demo to reduce initial downloads and animation decoding.
+The README automatically plays three compact animated WebP previews (cover, fluid, particles). Other entries use static WebP previews; every full GIF and live demo remains linked. This limits concurrent animation and initial media size while retaining visible motion.

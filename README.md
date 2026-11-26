@@ -9,13 +9,13 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a> · <a href="docs/CREDITS.md">Credits</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
-[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2-preview.webp)](docs/readme/cover-v2.gif)
+[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2-motion.webp)](docs/readme/cover-v2.gif)
 
 [▶ View animation](docs/readme/cover-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/)
 
 A spatial portfolio built around room navigation, interactive shaders, GPU morphing, phased preparation, and standalone mini-worlds with explicit lifecycles.
 
-The previews combine recorded browser frames with explanatory diagrams. Select an image or “View animation” to open its full GIF, or follow “Open live demo” to interact. This README loads static previews by default; sampled animations are not frame-rate benchmarks.
+The cover, fluid, and particle previews play automatically; other entries use static previews. Select an image or “View animation” to open the full GIF, or follow “Open live demo” to interact. Recorded frames and explanatory diagrams are combined; sampled previews are not frame-rate benchmarks.
 
 **Jump to:** [Spatial navigation](#spatial-navigation) · [Renderer handoff](#shared-renderer) · [Flow fields](#fluid-typography) · [GPU particles](#particle-morphing) · [Image reveal](#image-reveal) · [Material states](#material-study) · [Singularity](#singularity) · [Gravity Off](#gravity-off) · [Xiaojian](#xiaojian)
 
@@ -47,7 +47,7 @@ This shared renderer applies to the opening and the host site; standalone pieces
 
 ## 03 / Fluid typography
 
-[![03 / Fluid typography](docs/readme/fluid-v2-preview.webp)](docs/readme/fluid-v2.gif)
+[![03 / Fluid typography](docs/readme/fluid-v2-motion.webp)](docs/readme/fluid-v2.gif)
 
 [▶ View animation](docs/readme/fluid-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
@@ -61,7 +61,7 @@ Two half-float render targets ping-pong between read and write: semi-Lagrangian 
 
 ## 04 / GPU particle morphing
 
-[![04 / GPU particle morphing](docs/readme/particles-v2-preview.webp)](docs/readme/particles-v2.gif)
+[![04 / GPU particle morphing](docs/readme/particles-v2-motion.webp)](docs/readme/particles-v2.gif)
 
 [▶ View animation](docs/readme/particles-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 

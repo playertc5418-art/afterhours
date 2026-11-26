@@ -9,13 +9,13 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">进入网站 ↗</a> · <a href="docs/ENGINEERING.zh-CN.md">工程笔记</a> · <a href="docs/CREDITS.zh-CN.md">来源与署名</a> · <a href="CONTRIBUTING.zh-CN.md">参与贡献</a></p>
 
-[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2-preview.webp)](docs/readme/cover-v2.gif)
+[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2-motion.webp)](docs/readme/cover-v2.gif)
 
 [▶ 查看动图](docs/readme/cover-v2.gif) · [在线体验 ↗](https://playertc5418-art.github.io/afterhours/)
 
 这是一个可穿梭的空间作品集，也是一组图形与交互工程实验：建筑空间导航、交互着色器、GPU 粒子变形、揭幕前的分批准备，以及带完整生命周期的小世界。
 
-预览图组合了真实浏览器画面与技术示意。点击图片或“查看动图”可打开完整动画，“在线体验”进入对应页面；README 默认加载静态预览。示意图用于讲解，抽帧动画不用于测量帧率。
+封面、流体和粒子预览自动播放，其他条目使用静态预览。点击图片或“查看动图”可打开完整动画，“在线体验”进入对应页面。画面组合了真实录屏与说明图示；抽帧预览不用于测量帧率。
 
 **浏览路线：** [空间导航](#spatial-navigation) · [渲染器接力](#shared-renderer) · [流体文字](#fluid-typography) · [GPU 粒子](#particle-morphing) · [图像显影](#image-reveal) · [材质实验](#material-study) · [奇点](#singularity) · [失重文字](#gravity-off) · [小间](#xiaojian)
 
@@ -47,7 +47,7 @@ Three.js 射线代理随场景透视投影变化，让命中区域贴合画面�
 
 ## 03 / 可以搅动的流体文字
 
-[![03 / 可以搅动的流体文字](docs/readme/fluid-v2-preview.webp)](docs/readme/fluid-v2.gif)
+[![03 / 可以搅动的流体文字](docs/readme/fluid-v2-motion.webp)](docs/readme/fluid-v2.gif)
 
 [▶ 查看动图](docs/readme/fluid-v2.gif) · [在线体验 ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
@@ -61,7 +61,7 @@ Three.js 射线代理随场景透视投影变化，让命中区域贴合画面�
 
 ## 04 / GPU 粒子形变
 
-[![04 / GPU 粒子形变](docs/readme/particles-v2-preview.webp)](docs/readme/particles-v2.gif)
+[![04 / GPU 粒子形变](docs/readme/particles-v2-motion.webp)](docs/readme/particles-v2.gif)
 
 [▶ 查看动图](docs/readme/particles-v2.gif) · [在线体验 ↗](https://playertc5418-art.github.io/afterhours/#lab)
 

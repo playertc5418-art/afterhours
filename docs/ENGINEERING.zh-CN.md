@@ -263,4 +263,4 @@ README 中的流场箭头与状态节点属于讲解示意，未读取 GPU 流�
 
 [![准备阶段与线程分工示意](readme/preparation-v2-preview.webp)](readme/preparation-v2.svg)
 
-README 默认使用静态 WebP 预览，每个预览链接保留完整 GIF 与在线体验入口，以减少默认下载和动画解码负担。
+README 自动播放封面、流体和粒子三处轻量动画 WebP，其余使用静态 WebP 预览，每项均保留完整 GIF 和在线体验入口，控制同时播放的动画数量与默认媒体体积。
