@@ -68,3 +68,7 @@ Singularity's black-hole imagery cites [NASA's visualization](https://www.nasa.g
 The site's contribution includes scene assembly, interaction state, camera/scroll/DOM coordination, readiness and renderer integration, experiment controls, and the presentation of independent worlds. That integration does not transfer authorship of the dependencies or assets listed above. Sources are based on the current provenance files and shipped notices; newly identified borrowed work should add its upstream link, version, use, and changes here.
 
 No blanket license for the complete website is declared. Keep third-party notices and per-asset terms when discussing reuse; an eventual license for locally authored code would not relicense these upstream works.
+
+## README presentation references
+
+The cover, subject framing, and technical comparisons were informed by visual study of [Anime.js](https://github.com/juliangarnier/anime), [COBE](https://github.com/shuding/cobe), and [React Three Fiber](https://github.com/pmndrs/react-three-fiber). These are presentation references; runtime code and asset origins are listed above. The compositions use this project’s browser recordings and native HTML/SVG explanatory graphics.

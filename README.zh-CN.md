@@ -9,9 +9,11 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">进入网站 ↗</a> · <a href="docs/ENGINEERING.zh-CN.md">工程笔记</a> · <a href="docs/CREDITS.zh-CN.md">来源与署名</a> · <a href="CONTRIBUTING.zh-CN.md">参与贡献</a></p>
 
+[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2.gif)](https://playertc5418-art.github.io/afterhours/)
+
 这是一个可穿梭的空间作品集，也是一组图形与交互工程实验：建筑空间导航、交互着色器、GPU 粒子变形、揭幕前的分批准备，以及带完整生命周期的小世界。
 
-下面九段 GIF 均录自真实浏览器操作，经缩放与抽帧用于阅读展示，不用于测算帧率；渲染准备图为结构示意。
+封面与下方九段技术动图将真实浏览器画面与说明图示组合。示意部分用于解释实现，抽帧预览不用于测量帧率；流程图是架构示意。
 
 **浏览路线：** [空间导航](#spatial-navigation) · [渲染器接力](#shared-renderer) · [流体文字](#fluid-typography) · [GPU 粒子](#particle-morphing) · [图像显影](#image-reveal) · [材质实验](#material-study) · [奇点](#singularity) · [失重文字](#gravity-off) · [小间](#xiaojian)
 
@@ -19,7 +21,7 @@
 
 ## 01 / 用建筑组织导航
 
-[![01 / 用建筑组织导航](docs/readme/spatial-interaction.gif)](https://playertc5418-art.github.io/afterhours/)
+[![01 / 用建筑组织导航](docs/readme/navigation-v2.gif)](https://playertc5418-art.github.io/afterhours/)
 
 房间与内部物件就是内容入口：点进房间检视空间，再回到建筑总览，不用丢失当前上下文。
 
@@ -29,7 +31,7 @@ Three.js 射线代理随场景透视投影变化，让命中区域贴合画面�
 
 ## 02 / 开场与首页共享渲染器
 
-[![02 / 开场与首页共享渲染器](docs/readme/opening.gif)](https://playertc5418-art.github.io/afterhours/)
+[![02 / 开场与首页共享渲染器](docs/readme/handoff-v2.gif)](https://playertc5418-art.github.io/afterhours/)
 
 光轨开场把画布交给夜间工坊，开场与建筑主站共用 `RenderHost` 创建的同一份 `WebGLRenderer`。提前准备主站场景省去了另建主渲染上下文的开销，但交接时必须恢复 render target、viewport、scissor、色彩空间、tone mapping、曝光和阴影状态，防止前一阶段的配置串到下一阶段。
 
@@ -39,7 +41,9 @@ Three.js 射线代理随场景透视投影变化，让命中区域贴合画面�
 
 ## 03 / 可以搅动的流体文字
 
-[![03 / 可以搅动的流体文字](docs/readme/lab-fluid.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![03 / 可以搅动的流体文字](docs/readme/fluid-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+
+左侧为概念流场示意，右侧为实际显示效果录屏。
 
 在文字上滑动指针，字形随之弯曲并产生 RGB 色散，扰动随衰减慢慢平息。
 
@@ -49,7 +53,7 @@ Three.js 射线代理随场景透视投影变化，让命中区域贴合画面�
 
 ## 04 / GPU 粒子形变
 
-[![04 / GPU 粒子形变](docs/readme/lab-particles.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![04 / GPU 粒子形变](docs/readme/particles-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
 同一批粒子在 `CODE`、`FORM` 与雕塑形体之间切换，指针会把粒子推开，点击则激起向外扩散的冲击波。
 
@@ -59,7 +63,7 @@ Canvas2D 字形采样与雕塑几何提供目标点位，写入顶点缓冲属�
 
 ## 05 / 从信号到图像的显影
 
-[![05 / 从信号到图像的显影](docs/readme/lab-reveal.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![05 / 从信号到图像的显影](docs/readme/reveal-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
 画面从噪波、网格与半色调点阵逐步显影，指针经过处还会叠加局部透镜效果。
 
@@ -69,7 +73,7 @@ Canvas2D 字形采样与雕塑几何提供目标点位，写入顶点缓冲属�
 
 ## 06 / 一个形体，五种材质状态
 
-[![06 / 一个形体，五种材质状态](docs/readme/lab-material.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![06 / 一个形体，五种材质状态](docs/readme/materials-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
 
 在实体、线框、切片、点云与 X 光五种状态间切换，从表层、结构到内部观察同一个形体。
 
@@ -79,7 +83,7 @@ Canvas2D 字形采样与雕塑几何提供目标点位，写入顶点缓冲属�
 
 ## 07 / 奇点：弯曲的光与距离联动的声音
 
-[![07 / 奇点：弯曲的光与距离联动的声音](docs/readme/singularity.gif)](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
+[![07 / 奇点：弯曲的光与距离联动的声音](docs/readme/singularity-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
 
 绕行吸积盘、切换配色或靠近视界时，画面与声音混音都会随相机距离变化。
 
@@ -89,7 +93,7 @@ Canvas2D 字形采样与雕塑几何提供目标点位，写入顶点缓冲属�
 
 ## 08 / GRAVITY OFF：有重量的文字
 
-[![08 / GRAVITY OFF：有重量的文字](docs/readme/gravity-off.gif)](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
+[![08 / GRAVITY OFF：有重量的文字](docs/readme/gravity-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
 
 把字母释放到空间中拖拽、切换重力，再重新拼回构图。
 
@@ -99,7 +103,7 @@ Three.js 渲染挤出字形，Rapier 模拟复合凸包碰撞体，物理步长�
 
 ## 09 / 小间：有生命周期的微缩世界
 
-[![09 / 小间：有生命周期的微缩世界](docs/readme/xiaojian.gif)](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
+[![09 / 小间：有生命周期的微缩世界](docs/readme/xiaojian-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
 
 走进由几何、光照、天气与声音拼成的小世界，换个视角再回到收藏列表。
 
@@ -107,7 +111,7 @@ React 外壳通过带版本的消息协议与独立场景 iframe 通信，校验
 
 ## 在第一次交互前完成准备
 
-![Preparation pipeline — architectural illustration](docs/readme/render-pipeline.svg)
+![Preparation pipeline — architectural illustration](docs/readme/preparation-v2.svg)
 
 1. **把可抽离的数据处理放进 Worker。** 环境 Worker 拉取、校验并解压烘焙环境数据，通过可转移 `ArrayBuffer` 回传；纹理创建与 GPU 上传仍在主线程完成。
 2. **分批编译与小视口预热。** 代表性材质变体分批调用 `compileAsync`，随后在 `32 × 32` 小视口执行真实绘制预热，并恢复可见性、render target、viewport 与 scissor 状态。

@@ -203,3 +203,9 @@ The public files below are the current distribution, not the complete TypeScript
 These links explain the underlying APIs. The project-specific behavior and limitations described above come from the implementation, rather than implying endorsement by those projects.
 
 [Contribute a reproduction or improvement](../CONTRIBUTING.md) · [Back to README](../README.md)
+
+## Image notes
+
+The README field arrows and state nodes are explanatory schematics, not GPU-field readbacks or profiler logs. Embedded application views are real browser recordings; the particle capture covers CODE, FORM, SCULPTURE, and IMPULSE. Material comparisons use frames following each state switch. Capture sampling and GIF playback speed do not establish actual frame rates.
+
+![Preparation and thread ownership schematic](readme/preparation-v2.svg)

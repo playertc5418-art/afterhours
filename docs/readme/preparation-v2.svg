@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="t d">
+<title id="t">AFTERHOURS: preparation before presentation</title><desc id="d">A schematic separates Worker asset processing from main-thread texture creation, shader compilation and draw priming. Readiness gates presentation. Animated signals are illustrative, not measured timings.</desc>
+<style>text{font-family:Consolas,monospace;fill:#172022;font-size:24px}.small{font-size:19px;fill:#536365}.title{font-family:Arial,sans-serif;font-size:39px;font-weight:700}.wire{fill:none;stroke:#7d8a83;stroke-width:2}.signal{fill:#708f27}@media(prefers-reduced-motion:reduce){.signal{display:none}}</style>
+<rect width="1100" height="700" fill="#efeee7"/>
+<text x="48" y="52" class="small">AFTERHOURS / RENDERING NOTES</text><text x="48" y="112" class="title">Prepare first. Present when ready.</text>
+<rect x="48" y="154" width="1004" height="172" fill="#e1e6d8"/>
+<text x="68" y="187" class="small">WORKER / DATA PROCESSING</text>
+<g fill="none" stroke="#829298"><rect x="70" y="211" width="250" height="72"/><rect x="425" y="211" width="250" height="72"/><rect x="780" y="211" width="250" height="72"/></g>
+<text x="92" y="256">FETCH</text><text x="447" y="256">DECOMPRESS</text><text x="802" y="256">VALIDATE</text>
+<path id="w" d="M320 247H425M675 247H780" class="wire"/>
+<path id="transfer" d="M905 283V344H195V424" class="wire"/>
+<rect x="377" y="329" width="360" height="34" fill="#efeee7"/><text x="389" y="354" class="small">transferable ArrayBuffer →</text>
+<text x="68" y="401" class="small">MAIN THREAD / GPU PREPARATION</text>
+<g fill="none" stroke="#829298"><rect x="70" y="424" width="250" height="86"/><rect x="425" y="424" width="250" height="86"/><rect x="780" y="424" width="250" height="86"/></g>
+<text x="90" y="459">TEXTURES</text><text x="90" y="490" class="small">Create + upload</text><text x="445" y="459">SHADERS</text><text x="445" y="490" class="small">Batched compileAsync</text><text x="800" y="459">DRAW PRIMING</text><text x="800" y="490" class="small">Small-area real draws</text>
+<path id="m" d="M320 467H425M675 467H780M905 510V550" class="wire"/>
+<rect x="48" y="550" width="1004" height="76" fill="#0b1013"/>
+<text x="75" y="596" style="fill:#c5f467;font-size:29px">ready → presented → entered</text><text x="684" y="596" style="fill:#efeee7;font-size:22px">ONE SHARED RENDERER</text>
+<circle r="6" class="signal"><animateMotion dur="3s" repeatCount="indefinite" path="M70 247H1030"/></circle><circle r="6" class="signal"><animateMotion dur="4s" repeatCount="indefinite" path="M905 283V344H195V424"/></circle><circle r="6" class="signal"><animateMotion dur="5s" repeatCount="indefinite" path="M70 467H1030"/></circle>
+<text x="48" y="671" class="small">ARCHITECTURAL SCHEMATIC / SIGNAL MOTION DOES NOT REPRESENT MEASURED TIMING</text>
+</svg>

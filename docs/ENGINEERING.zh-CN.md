@@ -256,3 +256,9 @@ while (accumulator >= 1 / 60 && steps < 4) {
 这些资料解释基础 API；上面的项目行为与边界来自实际实现，不代表获得这些项目背书。
 
 [贡献复现报告或改进](../CONTRIBUTING.zh-CN.md) · [返回 README](../README.zh-CN.md)
+
+## 配图说明
+
+README 中的流场箭头与状态节点属于讲解示意，未读取 GPU 流场或性能日志。图内的浏览器画面来自真实录制，粒子补录覆盖 CODE、FORM、SCULPTURE 和 IMPULSE。材质静态对照选取每次切换后的帧；录屏采样与 GIF 播放速度不能用来证明实际帧率。
+
+![准备阶段与线程分工示意](readme/preparation-v2.svg)
