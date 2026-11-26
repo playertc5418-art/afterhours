@@ -208,4 +208,6 @@ These links explain the underlying APIs. The project-specific behavior and limit
 
 The README field arrows and state nodes are explanatory schematics, not GPU-field readbacks or profiler logs. Embedded application views are real browser recordings; the particle capture covers CODE, FORM, SCULPTURE, and IMPULSE. Material comparisons use frames following each state switch. Capture sampling and GIF playback speed do not establish actual frame rates.
 
-![Preparation and thread ownership schematic](readme/preparation-v2.svg)
+[![Preparation and thread ownership schematic](readme/preparation-v2-preview.webp)](readme/preparation-v2.svg)
+
+The README uses static WebP previews by default, retaining links to every full GIF and live demo to reduce initial downloads and animation decoding.

@@ -261,4 +261,6 @@ while (accumulator >= 1 / 60 && steps < 4) {
 
 README 中的流场箭头与状态节点属于讲解示意，未读取 GPU 流场或性能日志。图内的浏览器画面来自真实录制，粒子补录覆盖 CODE、FORM、SCULPTURE 和 IMPULSE。材质静态对照选取每次切换后的帧；录屏采样与 GIF 播放速度不能用来证明实际帧率。
 
-![准备阶段与线程分工示意](readme/preparation-v2.svg)
+[![准备阶段与线程分工示意](readme/preparation-v2-preview.webp)](readme/preparation-v2.svg)
+
+README 默认使用静态 WebP 预览，每个预览链接保留完整 GIF 与在线体验入口，以减少默认下载和动画解码负担。

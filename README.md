@@ -9,11 +9,13 @@
 
 <p align="center"><a href="https://playertc5418-art.github.io/afterhours/">Explore the website ↗</a> · <a href="docs/ENGINEERING.md">Engineering notes</a> · <a href="docs/CREDITS.md">Credits</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
-[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2.gif)](https://playertc5418-art.github.io/afterhours/)
+[![AFTERHOURS — spatial interfaces and real-time graphics](docs/readme/cover-v2-preview.webp)](docs/readme/cover-v2.gif)
+
+[▶ View animation](docs/readme/cover-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/)
 
 A spatial portfolio built around room navigation, interactive shaders, GPU morphing, phased preparation, and standalone mini-worlds with explicit lifecycles.
 
-The cover and nine technical animations combine recorded browser frames with explanatory diagrams. Schematic elements illustrate behavior; the sampled previews are not frame-rate benchmarks.
+The previews combine recorded browser frames with explanatory diagrams. Select an image or “View animation” to open its full GIF, or follow “Open live demo” to interact. This README loads static previews by default; sampled animations are not frame-rate benchmarks.
 
 **Jump to:** [Spatial navigation](#spatial-navigation) · [Renderer handoff](#shared-renderer) · [Flow fields](#fluid-typography) · [GPU particles](#particle-morphing) · [Image reveal](#image-reveal) · [Material states](#material-study) · [Singularity](#singularity) · [Gravity Off](#gravity-off) · [Xiaojian](#xiaojian)
 
@@ -21,7 +23,9 @@ The cover and nine technical animations combine recorded browser frames with exp
 
 ## 01 / Architecture as navigation
 
-[![01 / Architecture as navigation](docs/readme/navigation-v2.gif)](https://playertc5418-art.github.io/afterhours/)
+[![01 / Architecture as navigation](docs/readme/navigation-v2-preview.webp)](docs/readme/navigation-v2.gif)
+
+[▶ View animation](docs/readme/navigation-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/)
 
 Rooms and objects act as spatial entry points: click a room to inspect it, then return to the building overview without losing context.
 
@@ -31,7 +35,9 @@ Three.js raycast proxies track scene perspective so hit regions match what you s
 
 ## 02 / One renderer, two experiences
 
-[![02 / One renderer, two experiences](docs/readme/handoff-v2.gif)](https://playertc5418-art.github.io/afterhours/)
+[![02 / One renderer, two experiences](docs/readme/handoff-v2-preview.webp)](docs/readme/handoff-v2.gif)
+
+[▶ View animation](docs/readme/handoff-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/)
 
 The opening highway hands control over to the nighttime workshop, sharing one `WebGLRenderer` managed by `RenderHost`. Preparing the home scene before the reveal avoids creating a second host context, while restoring render target, viewport, scissor, color space, tone mapping, exposure, and shadow state keeps settings from one scene from leaking into the next.
 
@@ -41,7 +47,9 @@ This shared renderer applies to the opening and the host site; standalone pieces
 
 ## 03 / Fluid typography
 
-[![03 / Fluid typography](docs/readme/fluid-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![03 / Fluid typography](docs/readme/fluid-v2-preview.webp)](docs/readme/fluid-v2.gif)
+
+[▶ View animation](docs/readme/fluid-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
 Left: a conceptual field diagram. Right: recorded display output.
 
@@ -53,7 +61,9 @@ Two half-float render targets ping-pong between read and write: semi-Lagrangian 
 
 ## 04 / GPU particle morphing
 
-[![04 / GPU particle morphing](docs/readme/particles-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![04 / GPU particle morphing](docs/readme/particles-v2-preview.webp)](docs/readme/particles-v2.gif)
+
+[▶ View animation](docs/readme/particles-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
 Morph a point cloud between `CODE`, `FORM`, and a sculpture, push particles aside with the pointer, and send an expanding shockwave through the form on click.
 
@@ -63,7 +73,9 @@ Canvas2D text sampling and sculpture geometry supply target positions stored in 
 
 ## 05 / From signal to image
 
-[![05 / From signal to image](docs/readme/reveal-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![05 / From signal to image](docs/readme/reveal-v2-preview.webp)](docs/readme/reveal-v2.gif)
+
+[▶ View animation](docs/readme/reveal-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
 Bring an image up through noise, grid, and halftone stages, and inspect it through a local pointer lens.
 
@@ -73,7 +85,9 @@ Luminance sets dot radius inside a grid, a scan front blends signal stages towar
 
 ## 06 / One form, five material states
 
-[![06 / One form, five material states](docs/readme/materials-v2.gif)](https://playertc5418-art.github.io/afterhours/#lab)
+[![06 / One form, five material states](docs/readme/materials-v2-preview.webp)](docs/readme/materials-v2.gif)
+
+[▶ View animation](docs/readme/materials-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/#lab)
 
 Switch between solid, wire, sliced, point, and X-ray views while keeping the underlying form legible across surface, structural, and interior reads.
 
@@ -83,7 +97,9 @@ Solid, line, and point representations derive from a shared base form and receiv
 
 ## 07 / SINGULARITY — bending light and shaping sound
 
-[![07 / SINGULARITY — bending light and shaping sound](docs/readme/singularity-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
+[![07 / SINGULARITY — bending light and shaping sound](docs/readme/singularity-v2-preview.webp)](docs/readme/singularity-v2.gif)
+
+[▶ View animation](docs/readme/singularity-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/sites/blackhole/)
 
 Orbit a glowing accretion disk, switch palettes, or move toward the apparent horizon as visuals and audio respond to camera distance.
 
@@ -93,7 +109,9 @@ Built with native WebGL and custom GLSL, the fragment shader steps an approximat
 
 ## 08 / GRAVITY OFF — typography with a body
 
-[![08 / GRAVITY OFF — typography with a body](docs/readme/gravity-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
+[![08 / GRAVITY OFF — typography with a body](docs/readme/gravity-v2-preview.webp)](docs/readme/gravity-v2.gif)
+
+[▶ View animation](docs/readme/gravity-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/sites/gravity-off/)
 
 Drop letters into space, drag them around, change gravity, and reassemble the layout.
 
@@ -103,7 +121,9 @@ Extruded glyphs render in Three.js while Rapier simulates compound convex-hull c
 
 ## 09 / XIAOJIAN — miniature worlds with a lifecycle
 
-[![09 / XIAOJIAN — miniature worlds with a lifecycle](docs/readme/xiaojian-v2.gif)](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
+[![09 / XIAOJIAN — miniature worlds with a lifecycle](docs/readme/xiaojian-v2-preview.webp)](docs/readme/xiaojian-v2.gif)
+
+[▶ View animation](docs/readme/xiaojian-v2.gif) · [Open live demo ↗](https://playertc5418-art.github.io/afterhours/sites/xiaojian/)
 
 Step into small worlds built from geometry, lighting, weather, and sound, adjust the view, and return to the collection.
 
@@ -111,7 +131,7 @@ A React shell hosts isolated scene frames over a versioned message protocol that
 
 ## Prepare before the first interaction
 
-![Preparation pipeline — architectural illustration](docs/readme/preparation-v2.svg)
+[![Preparation pipeline — architectural illustration](docs/readme/preparation-v2-preview.webp)](docs/readme/preparation-v2.svg)
 
 1. **Offload separable work to a Worker.** The environment Worker fetches, validates, and decompresses baked environment data, returning `ArrayBuffer`s via transfer while texture creation and GPU upload stay on the main thread.
 2. **Batch compilation and priming.** Representative material variants run `compileAsync` in batches, followed by small-viewport draw priming that restores visibility, render targets, viewports, and scissor state.
